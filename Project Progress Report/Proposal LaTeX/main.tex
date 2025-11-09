@@ -75,15 +75,27 @@
 
 \section{Introduction}
 
-Here, write a brief introduction to the problem you are solving. This can be adapted from your problem description and motivation from the original proposal. This should be around 0.25-0.5 pages.
+Online dating systems usually optimize for clicks or stated preferences, not mutual compatibility. We study the problem of predicting an individual’s ideal partner profile from structured demographic, preference, and ratings data. Given a person A, our model first predicts the set of people A would likely say "yes" to, then composes a representative partner profile B* from the top-k candidates. Next, it predicts who B* would likely say "yes" to, producing a second composite C*. The difference between A and C* captures a preference gap that reveals why A’s most desired partners may prefer someone different. This framing supports both recommendation and self-insight, and it generalizes to other matching settings such as mentorship and team formation.
+
+We focus on the Columbia Speed Dating dataset, a tabular dataset with 8,378 rows and 123 columns, and formulate the task as classification for the yes or no decision with ranking objectives layered on top for recommendation quality. Our goals are: (1) build a leakage-free, explainable pipeline that predicts A’s decision on B, (2) construct B* and C* to surface preference gaps, and (3) evaluate with Accuracy, F1, ROC-AUC, and Precision@k.
 
 \section{Related Work}
 
-Here, talk about the related work you encountered for your approach. Cite at least 5 references. Refer to item 2. No one has done exactly your task? Write about the most similar thing you can find. This should be around 0.25-0.5 pages.
-
+Our work is informed by several research areas. The first is the original analysis of our dataset, the Columbia Speed Dating Experiment, where Fisman and Iyengar found that attractiveness, fun, and shared interests were highly predictive of matching decisions. Second, our A→B→C loop concept is inspired by two-sided matching theory, most famously represented by the Gale-Shapley algorithm, which underscores that stable matches must account for the preferences of both sides. Third, our approach is related to the broader field of recommender systems, which often use collaborative or content-based filtering to predict preferences, though typically not in a two-hop "preference gap" framework. Fourth, we draw from psychological research on partner preferences, such as the meta-analysis by Finkel, Eastwick, and colleagues, which reviewed the predictive validity of stated ideal partner preferences. Finally, given our goal of providing insights, our work connects to explainable AI (XAI) methods, such as SHAP, which we plan to use to identify which features most influence compatibility predictions.
 \section{Dataset}
 
-You should write about your dataset here, following the guidelines regarding item 1. This section may be 0.5-1 pages. Depending on your specific dataset, you may want to include subsections for the preprocessing, annotation, etc.
+We are using the Columbia Speed Dating dataset, as described in our proposal. It consists of \textbf{8,378 observations} (individual dates) and \textbf{123 columns}.
+\subsection{Preprocessing and Cleaning}
+
+The raw dataset required significant preprocessing. Our pipeline performs the following steps:
+\begin{itemize}
+    \item \textbf{String Decoding:} Many text columns were encoded as Python byte literals (e.g., `b'female'`). We decoded these into standard UTF-8 strings.
+    \item \textbf{Normalization:} All string values were converted to lowercase and stripped of leading/trailing whitespace to ensure consistency (e.g., "Law" and "law" are treated as identical).
+    \item \textbf{Missing Values:} We unified various missing value markers (e.g., "na", "n/a", "", "nan") into a single `pd.NA` representation.
+    \item \textbf{Numeric Coercion:} Columns that appeared to be numeric but were stored as objects (e.g., "1.0", "5") were automatically coerced into floating-point types, while preserving categorical ranges (e.g., "[0-1]").
+\end{itemize}
+
+This stable ID generation is crucial for our participant-based train-test split.
 
 \section{Features}
 
