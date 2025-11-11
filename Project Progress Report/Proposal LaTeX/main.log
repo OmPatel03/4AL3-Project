@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  11 NOV 2025 16:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.9)  11 NOV 2025 16:06
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -271,7 +271,8 @@ Package graphics Info: Driver file: pdftex.def on input line 107.
 File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count281
 \l__pdf_internal_box=\box52
-) (./main.aux)
+)
+No file main.aux.
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
@@ -292,7 +293,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 71.
 LaTeX Font Info:    ... okay on input line 71.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 71.
 LaTeX Font Info:    ... okay on input line 71.
- (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+(/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count282
 \scratchdimen=\dimen164
@@ -467,48 +468,124 @@ Underfull \hbox (badness 1728) in paragraph at lines 125--126
  []
 
 [2]
-<example-image-golden.pdf, id=74, 324.82053pt x 200.75pt>
+
+LaTeX Warning: Reference `tab:top10-recommendations' on page 3 undefined on input line 139.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 145.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 145.
+
+Underfull \hbox (badness 4441) in paragraph at lines 161--161
+[]\T1/ptm/m/n/10 (+20) Table 1: |Top 10 rec-om-mended part-ners for sam-ple par-tic-i-pant A. Ab-bre-vi-a-tions: Gen.=Gender,
+ []
+
+
+Underfull \hbox (badness 2452) in paragraph at lines 161--161
+\T1/ptm/m/n/10 (+20) Mov.=Movies, Rea.=Reading, Exe.=Exercise, Eur.=European/Caucasian-American, Lat.=Latino/Hispanic,
+ []
+
+
+LaTeX Warning: Reference `tab:composite-profile' on page 3 undefined on input line 165.
+
+
+LaTeX Warning: Reference `tab:top10-recommendations' on page 3 undefined on input line 165.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: Reference `citation-guide' on page 3 undefined on input line 199.
+
+
+LaTeX Warning: Reference `fig:experiments' on page 3 undefined on input line 200.
+
+<example-image-golden.pdf, id=68, 324.82053pt x 200.75pt>
 File: example-image-golden.pdf Graphic file (type pdf)
 <use example-image-golden.pdf>
-Package pdftex.def Info: example-image-golden.pdf  used on input line 152.
+Package pdftex.def Info: example-image-golden.pdf  used on input line 204.
 (pdftex.def)             Requested size: 219.08614pt x 135.40543pt.
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.0pt on input line 155.
-<example-image-a.pdf, id=75, 321.2pt x 240.9pt>
-File: example-image-a.pdf Graphic file (type pdf)
-<use example-image-a.pdf>
-Package pdftex.def Info: example-image-a.pdf  used on input line 160.
-(pdftex.def)             Requested size: 218.51521pt x 163.89069pt.
-<example-image-b.pdf, id=76, 321.2pt x 240.9pt>
-File: example-image-b.pdf Graphic file (type pdf)
-<use example-image-b.pdf>
-Package pdftex.def Info: example-image-b.pdf  used on input line 161.
-(pdftex.def)             Requested size: 218.51521pt x 163.89069pt.
- (./main.bbl [3 </usr/local/texlive/2023/texmf-dist/tex/latex/mwe/example-image-golden.pdf>]) [4
+(Font)              scaled to size 10.0pt on input line 207.
+<plots/true_false_positives.png, id=69, 823.878pt x 354.123pt>
+File: plots/true_false_positives.png Graphic file (type png)
+<use plots/true_false_positives.png>
+Package pdftex.def Info: plots/true_false_positives.png  used on input line 213.
+(pdftex.def)             Requested size: 455.24411pt x 195.67062pt.
 
- </usr/local/texlive/2023/texmf-dist/tex/latex/mwe/example-image-a.pdf> </usr/local/texlive/2023/texmf-dist/tex/latex/mwe/example-image-b.pdf>] (./main.aux)
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 226.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 227.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 228.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 229.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 230.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 230.
+
+
+LaTeX Warning: Reference `citation-guide' on page 3 undefined on input line 238.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 240.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 241.
+
+
+Package natbib Warning: Citation `Gusfield:97' on page 3 undefined on input line 242.
+
+
+Package natbib Warning: Citation `Ando2005' undefined on input line 246.
+
+
+Package natbib Warning: Citation `andrew2007scalable' undefined on input line 246.
+
+
+Package natbib Warning: Citation `rasooli-tetrault-2015' undefined on input line 246.
+
+
+LaTeX Warning: Reference `eq:example' on page 3 undefined on input line 261.
+
+(./main.bbl [3 </usr/local/texlive/2023/texmf-dist/tex/latex/mwe/example-image-golden.pdf>])
+
+Package natbib Warning: There were undefined citations.
+
+[4 <./plots/true_false_positives.png>] [5] (./main.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 76F89561514A41EB60532753C71DE485;1558.
+(rerunfilecheck)             Checksum: 46D7914AD72613F71C5E2BF1C4133B4B;1441.
  ) 
 Here is how much of TeX's memory you used:
- 14130 strings out of 476025
- 229864 string characters out of 5790018
- 1867388 words of memory out of 5000000
- 34146 multiletter control sequences out of 15000+600000
- 551106 words of font info for 203 fonts, out of 8000000 for 9000
+ 14166 strings out of 476025
+ 230215 string characters out of 5790018
+ 1877388 words of memory out of 5000000
+ 34155 multiletter control sequences out of 15000+600000
+ 558459 words of font info for 223 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,10n,90p,1259b,584s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{table.caption.4} has been referenced but does not exist, replaced by a fixed one
-
+ 90i,10n,90p,1259b,582s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (4 pages, 158735 bytes).
+Output written on main.pdf (5 pages, 203998 bytes).
 PDF statistics:
- 193 PDF objects out of 1000 (max. 8388607)
- 161 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
- 40568 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 168 PDF objects out of 1000 (max. 8388607)
+ 135 compressed objects within 2 object streams
+ 30 named destinations out of 1000 (max. 500000)
+ 49771 words of extra memory for PDF output out of 51595 (max. 10000000)
 
