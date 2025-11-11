@@ -99,15 +99,41 @@ This stable ID generation is crucial for our participant-based train-test split.
 
 \section{Features}
 
-Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 2. This may range from 0.25 pages to 0.5 pages.
+The model inputs were derived exclusively from pre-event survey responses in the Speed Dating dataset to ensure fairness and avoid post-event leakage. Each training example represents a pairing between two participants (A and B), with features combining demographic, self-assessment, and preference information from both sides.
+
+For participant A, features included demographic attributes (age, gender, race, and field of study), self-ratings (\texttt{attractive}, \texttt{sincere}, \texttt{intelligence}, \texttt{funny}, \texttt{ambition}), personal interests (e.g., \texttt{sports}, \texttt{music}, \texttt{movies}, \texttt{reading}, \texttt{exercise}, \texttt{hiking}, \texttt{art}, \texttt{shopping}), and stated partner preferences (\texttt{attractive\_important}, \texttt{sincere\_important}, etc.). 
+
+For participant B, corresponding partner features were used, including demographic information (\texttt{age\_o}, \texttt{gender\_o}, \texttt{race\_o}), self-ratings (\texttt{attractive\_o}, \texttt{sinsere\_o}, \texttt{intelligence\_o}, \texttt{funny\_o}, \texttt{ambitous\_o}), and stated partner preferences (\texttt{pref\_o\_attractive}, \texttt{pref\_o\_sincere}, etc.). This alignment allowed the model to learn the relationship between what A looks for in a partner and how B describes themselves.
+
+Feature engineering included converting all byte-encoded categorical fields to strings, coercing numeric columns to float representations, and one-hot encoding categorical attributes. We also computed derived attributes such as age difference and same-race indicators to capture potential compatibility signals. No explicit dimensionality reduction or learned embeddings were applied at this stage, as the dataset’s moderate size made full feature inclusion tractable.
+
+No additional feature selection was used beyond excluding post-event data (\texttt{like}, \texttt{match}, \texttt{decision\_o}) to prevent leakage. Future iterations may explore feature importance rankings from the trained model to prune redundant or weakly predictive features and to better interpret the contribution of personality versus demographic factors.
+
 
 \section{Implementation}
 
-Describe your model and implementation here. Refer to item 4. This may take around a page.
+We implemented a binary classification model to predict whether a participant (A) would say ``yes'' to another participant (B) using pre-event survey data from the Speed Dating dataset. The target label is the \texttt{decision} column, where 1 indicates ``yes'' and 0 indicates ``no.''
+
+Our baseline model is a simple majority class predictor, which always predicts ``no'' and achieves approximately 58\% accuracy (reflecting the dataset's 58/42 class split). This serves as a lower bound for model performance.
+
+For our primary model, we used a calibrated XGBoost classifier, which is a tree-based gradient boosting algorithm well-suited for mixed numeric and categorical data. The model was trained using log loss (binary cross-entropy) as the objective function, optimized through gradient boosting with decision trees. We applied isotonic calibration on validation data to ensure that predicted probabilities better reflected true likelihoods.
+
+The input features included both A's and B's survey responses: demographic variables (age, gender, race, field), self-ratings, interest scores, and partner preference indicators (\texttt{\textasteriskcentered important} and \texttt{pref\_o\_\textasteriskcentered}). To prevent data leakage, we excluded all post-event information such as \texttt{like}, \texttt{match}, and \texttt{decision\_o}.
+
+Training, validation, and testing were split at the participant level rather than by row to avoid information overlap between sets. Optimization used XGBoost's default gradient-based tree boosting with early stopping. Current results yield accuracy $\approx 0.63$, F1 $\approx 0.51$, and ROC-AUC $\approx 0.66$, a notable improvement over the baseline.
+
+Implementation challenges mainly involved cleaning the dataset (many categorical columns were stored as byte strings) and balancing interpretability with model complexity. Our next step is to extend this model to the A~$\rightarrow$~B~$\rightarrow$~C pipeline, where predictions are used to simulate and analyze multi-stage preference dynamics.
+
 
 \section{Results and Evaluation}
+The model was evaluated using participant-level data splits to ensure that no individual appeared in multiple subsets, preventing information leakage across training and testing. The dataset was divided into 70\% training, 15\% validation, and 15\% testing sets. This structure allowed for model tuning on the validation set and unbiased performance assessment on unseen participants.
 
-How are you evaluating your model? What results do you have so far? What are your baselines? Refer to item 5. This may take around 0.5 pages.
+We used a calibrated XGBoost classifier with isotonic calibration applied on the validation data. Calibration was verified using reliability curves and the Brier score to assess the alignment between predicted probabilities and observed outcomes.
+
+Evaluation focused on standard binary classification metrics, including accuracy, precision, recall, F1 score, and ROC-AUC. These metrics collectively measured both discrimination ability and balance between false positives and false negatives. The final model achieved an accuracy of approximately 0.63, F1 score of 0.51, and ROC-AUC of 0.66, representing a meaningful improvement over the 0.58 baseline accuracy from the majority-class predictor.
+
+While we did not employ full cross-validation due to computational constraints, the participant-level split provides a robust approximation of generalization. Future work will consider k-fold validation and top-K ranking metrics (e.g., Precision@K) to better evaluate recommendation-style extensions of the A~$\rightarrow$~B~$\rightarrow$~C pipeline.
+
 
 \section{Feedback and Plans}
 
