@@ -132,16 +132,67 @@ We used a calibrated XGBoost classifier with isotonic calibration applied on the
 
 Evaluation focused on standard binary classification metrics, including accuracy, precision, recall, F1 score, and ROC-AUC. These metrics collectively measured both discrimination ability and balance between false positives and false negatives. The final model achieved an accuracy of approximately 0.63, F1 score of 0.51, and ROC-AUC of 0.66, representing a meaningful improvement over the 0.58 baseline accuracy from the majority-class predictor.
 
+
+
 While we did not employ full cross-validation due to computational constraints, the participant-level split provides a robust approximation of generalization. Future work will consider k-fold validation and top-K ranking metrics (e.g., Precision@K) to better evaluate recommendation-style extensions of the A~$\rightarrow$~B~$\rightarrow$~C pipeline.
 
+Table~\ref{tab:top10-recommendations} shows the top 10 recommended partners for a sample participant A, ranked by predicted compatibility score (p\_AB). The table illustrates the model's ability to identify high-potential matches based on pre-event survey data.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}cccccccccccccccc@{}}
+\hline
+\textbf{ID} & \textbf{Gen.} & \textbf{Age} & \textbf{Race} & \textbf{Field} & \textbf{Att.} & \textbf{Sin.} & \textbf{Int.} & \textbf{Fun.} & \textbf{Amb.} & \textbf{Spo.} & \textbf{Mus.} & \textbf{Mov.} & \textbf{Rea.} & \textbf{Exe.} & \textbf{p\_AB} \\
+\hline
+137 & F & 29 & Oth. & Music Ed. & 9 & 10 & 9 & 9 & 8 & 8 & 10 & 9 & 5 & 10 & 0.64 \\
+439 & F & 27 & Eur. & Finance & 8 & 10 & 10 & 9 & 10 & 7 & 10 & 10 & 5 & 10 & 0.64 \\
+367 & F & 26 & Lat. & Law & 9 & 9 & 9 & 9 & 9 & 8 & 9 & 9 & 7 & 7 & 0.64 \\
+199 & F & 29 & Eur. & Psychology & 7 & 8 & 4 & 8 & 8 & 6 & 6 & 7 & 7 & 4 & 0.64 \\
+198 & F & 28 & Eur. & Social Work & 9 & 8 & 5 & 9 & 3 & 6 & 6 & 9 & 9 & 5 & 0.64 \\
+369 & F & 28 & Eur. & German Lit. & 7 & 10 & 7 & 10 & 7 & 1 & 10 & 10 & 10 & 5 & 0.64 \\
+370 & F & 29 & Oth. & Psychology & 7 & 9 & 9 & 9 & 9 & 3 & 9 & 7 & 5 & 9 & 0.64 \\
+194 & F & 22 & Eur. & Social Work & 8 & 9 & 7 & 10 & 7 & 8 & 5 & 7 & 9 & 5 & 0.64 \\
+382 & F & 22 & Eur. & Comm. & 7 & 9 & 9 & 9 & 4 & 2 & 10 & 10 & 4 & 1 & 0.64 \\
+383 & F & 22 & Eur. & Social Work & 6 & 8 & 8 & 8 & 8 & 7 & 10 & 8 & 6 & 10 & 0.64 \\
+\hline
+\end{tabular}
+\caption{Top 10 recommended partners for sample participant A. Abbreviations: Gen.=Gender, Att.=Attractive, Sin.=Sincere, Int.=Intelligence, Fun.=Funny, Amb.=Ambition, Spo.=Sports, Mus.=Music, Mov.=Movies, Rea.=Reading, Exe.=Exercise, Eur.=European/Caucasian-American, Lat.=Latino/Hispanic, Oth.=Other, Comm.=Communications, Ed.=Education, Lit.=Literature.}
+\label{tab:top10-recommendations}
+\end{table*}
+
+Table~\ref{tab:composite-profile} presents the composite profile B*, constructed by averaging the characteristics of the top 10 recommended partners shown in Table~\ref{tab:top10-recommendations}. This aggregated profile represents the ``ideal partner type'' that participant A would most likely prefer, based on the model's predictions.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lr@{}}
+\hline
+\textbf{Attribute} & \textbf{Value} \\
+\hline
+Age & 26.2 \\
+Attractive & 7.7 \\
+Sincere & 9.0 \\
+Intelligence & 7.7 \\
+Funny & 9.0 \\
+Ambition & 7.3 \\
+Sports & 5.6 \\
+Music & 8.5 \\
+Movies & 8.6 \\
+Reading & 6.7 \\
+Exercise & 6.6 \\
+Gender & Female \\
+Race & European/Caucasian-American \\
+Field & Social Work \\
+\hline
+\end{tabular}
+\caption{Composite profile B* derived by averaging the top 10 recommended partners for participant A. Numeric values represent means across all candidates; categorical values represent the mode (most common value).}
+\label{tab:composite-profile}
+\end{table}
 
 \section{Feedback and Plans}
 
 Write about your plans for the remainder of the project. This should include a discussion of the feedback you received from your TA, and how you plan to improve your approach. Reflect on your implementation and areas for improvement. Refer to item 6. This may be around 0.5 pages.
-
-\section{Template Notes}
-
-You can remove this section or comment it out, as it only contains instructions for how to use this template. You may use subsections in your document as you find appropriate.
 
 \subsection{Tables and figures}
 
@@ -158,12 +209,11 @@ See Figure~\ref{fig:experiments} for an example of a figure and its caption.
 \end{figure}
 
 \begin{figure*}[t]
-  \includegraphics[width=0.48\linewidth]{example-image-a} \hfill
-  \includegraphics[width=0.48\linewidth]{example-image-b}
-  \caption {A minimal working example to demonstrate how to place
-    two images side-by-side.}
+  \centering
+  \includegraphics[width=\textwidth]{plots/true_false_positives.png}
+  \caption{Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives.}
+  \label{fig:true-false-positives}
 \end{figure*}
-
 
 \subsection{Citations}
 
