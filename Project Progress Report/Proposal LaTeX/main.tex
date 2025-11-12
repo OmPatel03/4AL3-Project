@@ -142,7 +142,14 @@ While we did not employ full cross-validation due to computational constraints, 
 
 \section{Feedback and Plans}
 
-Write about your plans for the remainder of the project. This should include a discussion of the feedback you received from your TA, and how you plan to improve your approach. Reflect on your implementation and areas for improvement. Refer to item 6. This may be around 0.5 pages.
+Based on the feedback received from our teaching assistant, we identified several areas for improvement and refinement in our project. The TA first recommended establishing a clear baseline model to quantify the improvement achieved by our approach. While we initially compared performance against a majority-class baseline, we now plan to include a logistic regression model as a more informative reference point.
+
+The TA also suggested incorporating additional evaluation metrics beyond accuracy and F1 score. In response, we intend to report Precision–Recall curves, ROC curves, calibration plots, and the Brier score to better characterize both ranking performance and probability calibration. These metrics will provide a more comprehensive view of the model’s behavior, particularly given the class imbalance and probabilistic nature of our task.
+
+Finally, the TA recommended enhancing the proposal and report with more experimental details, such as training parameters, visualizations, and result summaries. Accordingly, we will document key hyperparameters (e.g., learning rate, maximum depth, early stopping criteria) and include performance graphs and feature-importance plots in our next submission.
+
+Reflecting on our progress, we recognize the importance of presenting interpretable, well-validated results rather than focusing solely on performance numbers. Over the coming weeks, we will focus on refining model interpretability, integrating stronger baselines, and expanding the visualization and analysis of our A~$\rightarrow$~B~$\rightarrow$~C pipeline results.
+
 
 
 
