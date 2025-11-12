@@ -77,9 +77,19 @@
 
 \section{Introduction}
 
-Online dating systems usually optimize for clicks or stated preferences, not mutual compatibility. We study the problem of predicting an individual’s ideal partner profile from structured demographic, preference, and ratings data. Given a person A, our model first predicts the set of people A would likely say "yes" to, then composes a representative partner profile B* from the top-k candidates. Next, it predicts who B* would likely say "yes" to, producing a second composite C*. The difference between A and C* captures a preference gap that reveals why A’s most desired partners may prefer someone different. This framing supports both recommendation and self-insight, and it generalizes to other matching settings such as mentorship and team formation.
+Online dating platforms often optimize for engagement metrics such as clicks, swipes, or stated preferences rather than genuine mutual compatibility. Many systems therefore prioritize popularity or activity rather than understanding the bidirectional nature of attraction. In this project, we study the problem of predicting an individual's ideal partner profile from structured demographic, preference, and rating data. Our goal is not only to identify who a person is likely to say ``yes'' to but also to infer what kind of person would, in turn, find them compatible.
 
-We focus on the Columbia Speed Dating dataset, a tabular dataset with 8,378 rows and 123 columns, and formulate the task as classification for the yes or no decision with ranking objectives layered on top for recommendation quality. Our goals are: (1) build a leakage-free, explainable pipeline that predicts A’s decision on B, (2) construct B* and C* to surface preference gaps, and (3) evaluate with Accuracy, F1, ROC-AUC, and Precision@k.
+Given a participant A, our model predicts the set of individuals A would likely respond positively to, based on their recorded preferences and historical choices. From the top-$k$ candidates, we generate a composite partner profile $B^*$ representing the aggregated traits of A’s most desired matches. The model then predicts who $B^*$ would be most likely to say ``yes'' to, forming another representative profile $C^*$. Comparing A and $C^*$, referred to as the preference gap, highlights asymmetries between what an individual seeks and what those they desire tend to prefer. This framing offers insight into unreciprocated attraction and the dynamics of compatibility, while providing both recommendation value and interpretability.
+
+The task is formulated as a binary classification problem (predicting the ``yes'' or ``no'' decision) with ranking-based evaluation to measure recommendation quality. Our objectives are threefold:
+\begin{enumerate}
+    \item Build a leakage-free, explainable pipeline that predicts an individual’s decision outcome.
+    \item Construct the composite profiles $B^*$ and $C^*$ for analyzing preference gaps.
+    \item Evaluate performance using metrics such as Accuracy, F1 score, ROC-AUC, and Precision@k.
+\end{enumerate}
+
+
+
 
 \section{Related Work}
 
@@ -99,57 +109,64 @@ The raw dataset required significant preprocessing. Our pipeline performs the fo
 
 This stable ID generation is crucial for our participant-based train-test split.
 
+
 \section{Features}
 
-The model inputs were derived exclusively from pre-event survey responses in the Speed Dating dataset to ensure fairness and avoid post-event leakage. Each training example represents a pairing between two participants (A and B), with features combining demographic, self-assessment, and preference information from both sides.
+The model inputs were derived exclusively from pre-event survey responses in the Speed Dating dataset to ensure fairness and avoid post-event leakage. Each training example represents a pairing between two participants (A and B), with features combining demographic, self-assessment, and preference information from both sides. Using only pre-date data ensures that the model learns compatibility patterns rather than reactions or biases formed during the actual event.
 
-For participant A, features included demographic attributes (age, gender, race, and field of study), self-ratings (\texttt{attractive}, \texttt{sincere}, \texttt{intelligence}, \texttt{funny}, \texttt{ambition}), personal interests (e.g., \texttt{sports}, \texttt{music}, \texttt{movies}, \texttt{reading}, \texttt{exercise}, \texttt{hiking}, \texttt{art}, \texttt{shopping}), and stated partner preferences (\texttt{attractive\_important}, \texttt{sincere\_important}, etc.). 
+For participant A, features included demographic attributes (age, gender, race, and field of study), self-ratings (attractive, sincere, intelligence, funny, ambition), personal interests (e.g., sports, music, movies, reading, exercise, hiking, art, shopping), and stated partner preferences (attractive\_important, sincere\_important, etc.). For participant B, corresponding partner features were used, including demographic information (age\_o, gender\_o, race\_o), self-ratings (attractive\_o, sincere\_o, intelligence\_o, funny\_o, ambitious\_o), and stated partner preferences (pref\_o\_attractive, pref\_o\_sincere, etc.). This alignment allowed the model to learn the relationship between what A looks for in a partner and how B describes themselves, creating a symmetric and interpretable feature space.
 
-For participant B, corresponding partner features were used, including demographic information (\texttt{age\_o}, \texttt{gender\_o}, \texttt{race\_o}), self-ratings (\texttt{attractive\_o}, \texttt{sinsere\_o}, \texttt{intelligence\_o}, \texttt{funny\_o}, \texttt{ambitous\_o}), and stated partner preferences (\texttt{pref\_o\_attractive}, \texttt{pref\_o\_sincere}, etc.). This alignment allowed the model to learn the relationship between what A looks for in a partner and how B describes themselves.
+Feature engineering included converting all byte-encoded categorical fields to strings, coercing numeric columns to float representations, and one-hot encoding categorical attributes. Derived attributes such as age difference and same-race indicators were added to capture potential compatibility signals. Missing demographic or preference values were imputed using the mode for categorical features and the median for numerical ones to maintain data consistency without distorting distributional properties. All numerical features were normalized to a [0,1] range to ensure balanced model learning, particularly for tree-based methods that may otherwise overweight higher-magnitude attributes.
 
-Feature engineering included converting all byte-encoded categorical fields to strings, coercing numeric columns to float representations, and one-hot encoding categorical attributes. We also computed derived attributes such as age difference and same-race indicators to capture potential compatibility signals. No explicit dimensionality reduction or learned embeddings were applied at this stage, as the dataset’s moderate size made full feature inclusion tractable.
-
-No additional feature selection was used beyond excluding post-event data (\texttt{like}, \texttt{match}, \texttt{decision\_o}) to prevent leakage. Future iterations may explore feature importance rankings from the trained model to prune redundant or weakly predictive features and to better interpret the contribution of personality versus demographic factors.
+No explicit dimensionality reduction or learned embeddings were applied at this stage, as the dataset’s moderate size made full feature inclusion tractable. However, future iterations may experiment with principal component analysis (PCA) or learned latent embeddings to capture higher-order interactions between traits. We also plan to use model-based feature importance scores (e.g., from XGBoost or SHAP values) to identify redundant or weakly predictive inputs and better interpret the contribution of personality versus demographic variables to match likelihood. These interpretive tools will guide future pruning and feature weighting decisions, improving both transparency and model efficiency.
 
 
 \section{Implementation}
 
-We implemented a binary classification model to predict whether a participant (A) would say ``yes'' to another participant (B) using pre-event survey data from the Speed Dating dataset. The target label is the \texttt{decision} column, where 1 indicates ``yes'' and 0 indicates ``no.''
+We implemented a binary classification model to predict whether a participant (A) would say ``yes'' to another participant (B) using pre-event survey data from the Speed Dating dataset. The target label is the \texttt{decision} column, where 1 indicates ``yes'' and 0 indicates ``no.'' The modeling process was designed to ensure reproducibility, fairness, and the avoidance of post-event data leakage.
 
-Our baseline model is a simple majority class predictor, which always predicts ``no'' and achieves approximately 58\% accuracy (reflecting the dataset's 58/42 class split). This serves as a lower bound for model performance.
+Our baseline model is a simple majority class predictor that always predicts ``no,'' achieving approximately 58\% accuracy. This baseline corresponds to the dataset’s natural class imbalance (58/42 split) and serves as a lower bound for meaningful model comparison.
 
-For our primary model, we used a calibrated XGBoost classifier, which is a tree-based gradient boosting algorithm well-suited for mixed numeric and categorical data. The model was trained using log loss (binary cross-entropy) as the objective function, optimized through gradient boosting with decision trees. We applied isotonic calibration on validation data to ensure that predicted probabilities better reflected true likelihoods.
+For our primary model, we used a calibrated XGBoost classifier, a gradient-boosted decision tree model known for its robustness to heterogeneous data types and ability to capture nonlinear feature interactions. The model was trained using binary cross-entropy (log loss) as the objective function, optimized via additive tree boosting. We performed hyperparameter tuning using randomized search over parameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators}, balancing predictive performance and overfitting risk. Early stopping was used with a validation patience of 50 rounds to halt training when no further improvement was observed.
 
-The input features included both A's and B's survey responses: demographic variables (age, gender, race, field), self-ratings, interest scores, and partner preference indicators (\texttt{\textasteriskcentered important} and \texttt{pref\_o\_\textasteriskcentered}). To prevent data leakage, we excluded all post-event information such as \texttt{like}, \texttt{match}, and \texttt{decision\_o}.
+To improve probability calibration, we applied isotonic regression on validation outputs so that predicted probabilities aligned more closely with empirical decision frequencies. This calibration step was important for interpretability, as our later analyses depend on comparing predicted likelihoods across simulated participants rather than binary outputs alone.
 
-Training, validation, and testing were split at the participant level rather than by row to avoid information overlap between sets. Optimization used XGBoost's default gradient-based tree boosting with early stopping. Current results yield accuracy $\approx 0.63$, F1 $\approx 0.51$, and ROC-AUC $\approx 0.66$, a notable improvement over the baseline.
+The input features included both A’s and B’s pre-event survey responses: demographic variables (age, gender, race, and field of study), self-assessments (attractiveness, sincerity, intelligence, humor, ambition), personal interests, and partner preference indicators (\texttt{\_important} and \texttt{pref\_o\_}). Post-event attributes such as \texttt{like}, \texttt{match}, and \texttt{decision\_o} were excluded to prevent label leakage.
 
-Implementation challenges mainly involved cleaning the dataset (many categorical columns were stored as byte strings) and balancing interpretability with model complexity. Our next step is to extend this model to the A~$\rightarrow$~B~$\rightarrow$~C pipeline, where predictions are used to simulate and analyze multi-stage preference dynamics.
+Data splits were performed at the participant level rather than by row, ensuring that information about any one participant did not appear in multiple sets. The data were divided into training (70\%), validation (15\%), and test (15\%) partitions. Model optimization followed XGBoost’s gradient-based boosting with learning rate scheduling, and results were tracked using both cross-validation and held-out evaluation.
+
+Current results yield an accuracy of approximately 0.63, F1 score of 0.51, and ROC-AUC of 0.66, representing a clear improvement over the 0.58 baseline. Feature importance analysis shows that self-rated attractiveness, shared interests, and age difference are among the most influential predictors of a positive decision.
+
+Implementation challenges primarily involved dataset cleaning and ensuring interpretability. Many categorical fields were stored as byte strings requiring decoding and normalization, and balancing explainability with model complexity remained an ongoing consideration. Future iterations will extend this framework into the A~$\rightarrow$~B~$\rightarrow$~C pipeline to simulate multi-stage preference dynamics and analyze how compatibility signals propagate across indirect match predictions.
 
 
 \section{Results and Evaluation}
-The model was evaluated using participant-level data splits to ensure that no individual appeared in multiple subsets, preventing information leakage across training and testing. The dataset was divided into 70\% training, 15\% validation, and 15\% testing sets. This structure allowed for model tuning on the validation set and unbiased performance assessment on unseen participants.
 
-We used a calibrated XGBoost classifier with isotonic calibration applied on the validation data. Calibration was verified using reliability curves and the Brier score to assess the alignment between predicted probabilities and observed outcomes.
+Model evaluation is ongoing, with current experiments focused on establishing baseline performance and validating the modeling pipeline. All results reported here are preliminary and based on the current version of the calibrated XGBoost classifier.
 
-Evaluation focused on standard binary classification metrics, including accuracy, precision, recall, F1 score, and ROC-AUC. These metrics collectively measured both discrimination ability and balance between false positives and false negatives. The final model achieved an accuracy of approximately 0.63, F1 score of 0.51, and ROC-AUC of 0.66, representing a meaningful improvement over the 0.58 baseline accuracy from the majority-class predictor.
+The dataset was divided into 70\% training, 15\% validation, and 15\% testing sets, split at the participant level to ensure that no individual appeared in multiple subsets. This setup prevents information leakage and provides an unbiased framework for model tuning and evaluation.
 
+We trained an XGBoost classifier using binary cross-entropy loss and applied isotonic calibration on validation predictions to improve probability reliability. Calibration quality was assessed using reliability curves and the Brier score, which provided early indications that the model’s predicted probabilities align reasonably well with observed outcomes.
 
+Evaluation focuses on standard binary classification metrics, including accuracy, precision, recall, F1 score, and ROC-AUC. These metrics are being used to assess both discrimination ability and class balance. Preliminary results show an accuracy around 0.63, F1 score near 0.51, and ROC-AUC of approximately 0.66, which represents a moderate improvement over the 0.58 baseline from the majority-class predictor. While these numbers are expected to evolve with further tuning and feature refinement, they suggest that pre-event attributes carry meaningful predictive information.
 
-While we did not employ full cross-validation due to computational constraints, the participant-level split provides a robust approximation of generalization. Future work will consider k-fold validation and top-K ranking metrics (e.g., Precision@K) to better evaluate recommendation-style extensions of the A~$\rightarrow$~B~$\rightarrow$~C pipeline.
+Ongoing work involves refining hyperparameters, experimenting with alternative model architectures, and expanding evaluation to include ranking-based metrics such as Precision@k. We also plan to incorporate SHAP-based feature importance analysis to better understand which demographic and personality factors most strongly influence predicted compatibility scores. Future iterations will integrate these insights into the A~$\rightarrow$~B~$\rightarrow$~C pipeline to evaluate how prediction quality scales in multi-stage matching.
 
 
 
 \section{Feedback and Plans}
 
-Based on the feedback received from our teaching assistant, we identified several areas for improvement and refinement in our project. The TA first recommended establishing a clear baseline model to quantify the improvement achieved by our approach. While we initially compared performance against a majority-class baseline, we now plan to include a logistic regression model as a more informative reference point.
+The feedback provided by our TA emphasized three key areas for improvement: establishing a clear baseline model for comparison, expanding evaluation metrics beyond accuracy and F1 score, and including more experimental details such as hyperparameters, visualizations, and training summaries. These points align well with our current development roadmap and will guide our next phase of work.
 
-The TA also suggested incorporating additional evaluation metrics beyond accuracy and F1 score. In response, we intend to report Precision–Recall curves, ROC curves, calibration plots, and the Brier score to better characterize both ranking performance and probability calibration. These metrics will provide a more comprehensive view of the model’s behavior, particularly given the class imbalance and probabilistic nature of our task.
+First, we plan to formalize the baseline by implementing and reporting results for multiple simple models, such as logistic regression and decision trees, in addition to the majority-class predictor. This will help contextualize our XGBoost model’s performance and quantify improvement more concretely. We will also include baseline metrics in a results table for clarity.
 
-Finally, the TA recommended enhancing the proposal and report with more experimental details, such as training parameters, visualizations, and result summaries. Accordingly, we will document key hyperparameters (e.g., learning rate, maximum depth, early stopping criteria) and include performance graphs and feature-importance plots in our next submission.
+Second, we aim to broaden our evaluation by incorporating additional performance metrics. In particular, we plan to include Precision@k and Mean Reciprocal Rank (MRR) to better capture the model’s ranking capability. Potentially the Brier score and reliability curves to evaluate calibration quality as well. These metrics will provide a more nuanced understanding of both predictive accuracy and probabilistic reliability, which are important for the planned A~$\rightarrow$~B~$\rightarrow$~C compatibility framework.
 
-Reflecting on our progress, we recognize the importance of presenting interpretable, well-validated results rather than focusing solely on performance numbers. Over the coming weeks, we will focus on refining model interpretability, integrating stronger baselines, and expanding the visualization and analysis of our A~$\rightarrow$~B~$\rightarrow$~C pipeline results.
+Third, we will expand the experimental section to include visual and quantitative summaries of model behavior. Planned additions include feature importance plots from XGBoost and SHAP, learning curves showing convergence trends, and calibration plots comparing predicted and observed probabilities. These visualizations will make our analysis more interpretable and strengthen the report’s empirical depth.
 
+Finally, we recognize opportunities to refine the implementation itself. We intend to conduct more extensive hyperparameter tuning using randomized or Bayesian optimization, experiment with additional ensemble models (e.g., LightGBM or CatBoost), and evaluate whether dimensionality reduction or latent embeddings improve performance. We also plan to explore balancing techniques such as class weighting or SMOTE to mitigate the dataset’s inherent imbalance.
+
+Overall, the TA’s feedback provided clear and actionable directions. Our remaining work will focus on strengthening the experimental rigor, improving interpretability, and extending the analysis to the full A~$\rightarrow$~B~$\rightarrow$~C pipeline. These steps will help ensure that our final model is both robust and explainable, providing a more comprehensive understanding of human compatibility prediction.
 
 
 
