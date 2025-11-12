@@ -108,9 +108,6 @@ The raw dataset required significant preprocessing. Our pipeline performs the fo
     \item \textbf{Numeric Coercion:} Columns that appeared to be numeric but were stored as objects (e.g., "1.0", "5") were automatically coerced into floating-point types, while preserving categorical ranges (e.g., "[0-1]").
 \end{itemize}
 
-This stable ID generation is crucial for our participant-based train-test split.
-
-
 \section{Features}
 
 The model inputs were derived exclusively from pre-event survey responses in the Speed Dating dataset to ensure fairness and avoid post-event leakage. Each training example represents a pairing between two participants (A and B), with features combining demographic, self-assessment, and preference information from both sides. Using only pre-date data ensures that the model learns compatibility patterns rather than reactions or biases formed during the actual event.
