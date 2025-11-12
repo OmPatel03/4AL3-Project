@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1762909039.73584 "main.aux" "main.bbl" "main" 1762909106.0365 0
+["bibtex main"] 1762909675.42515 "main.aux" "main.bbl" "main" 1762909676.44365 0
   "./acl_natbib.bst" 1762895854.01521 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
   "./custom.bib" 1762897203.97932 761 3cac5d21a25e4572919cb0cbcbb6fcb4 ""
-  "main.aux" 1762909105.77218 3294 04d943db0447075690aca0d41950e6fd "pdflatex"
+  "main.aux" 1762909676.19472 3294 04d943db0447075690aca0d41950e6fd "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1762909105.01378 "/Users/gregoryarcher/4AL3-Project-1/Project Progress Report/Proposal LaTeX/main.tex" "main.pdf" "main" 1762909106.03662 0
-  "/Users/gregoryarcher/4AL3-Project-1/Project Progress Report/Proposal LaTeX/main.tex" 1762909104.71781 22839 7509a247329e3db06d6dfbc3c06cb0e7 ""
+["pdflatex"] 1762909675.53272 "/Users/gregoryarcher/4AL3-Project-1/Project Progress Report/Proposal LaTeX/main.tex" "main.pdf" "main" 1762909676.44379 0
+  "/Users/gregoryarcher/4AL3-Project-1/Project Progress Report/Proposal LaTeX/main.tex" 1762909673.9517 22839 7509a247329e3db06d6dfbc3c06cb0e7 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1558214095 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
@@ -127,10 +127,10 @@
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
   "acl.sty" 1762895854.01498 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "main.aux" 1762909105.77218 3294 04d943db0447075690aca0d41950e6fd "pdflatex"
-  "main.bbl" 1762909039.83809 666 6925879952219c3b8e6f2990622845c6 "bibtex main"
-  "main.out" 1762909105.77289 974 c5e321cac87923730bc32f4aa0428735 "pdflatex"
-  "main.tex" 1762909104.71781 22839 7509a247329e3db06d6dfbc3c06cb0e7 ""
+  "main.aux" 1762909676.19472 3294 04d943db0447075690aca0d41950e6fd "pdflatex"
+  "main.bbl" 1762909675.53066 666 6925879952219c3b8e6f2990622845c6 "bibtex main"
+  "main.out" 1762909676.19523 974 c5e321cac87923730bc32f4aa0428735 "pdflatex"
+  "main.tex" 1762909673.9517 22839 7509a247329e3db06d6dfbc3c06cb0e7 ""
   "plots/true_false_positives.png" 1762895854.02117 58050 b870c4bac0cb43f4aa407ec933f13a23 ""
   (generated)
   "main.aux"
