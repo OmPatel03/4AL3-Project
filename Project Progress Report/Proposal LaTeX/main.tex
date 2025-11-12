@@ -5,6 +5,7 @@
 \usepackage[]{acl}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{float} % 
 
 % For proper rendering and hyphenation of words containing Latin characters (including in bib files)
 \usepackage[T1]{fontenc}
@@ -178,13 +179,6 @@ Overall, the TA’s feedback provided clear and actionable directions. Our remai
 %   \label{fig:experiments}
 % \end{figure}
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth]{plots/true_false_positives.png}
-  \caption{Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives.}
-  \label{fig:true-false-positives}
-\end{figure*}
-
 % \subsection{Citations}
 
 
@@ -216,7 +210,11 @@ Overall, the TA’s feedback provided clear and actionable directions. Our remai
 
 \section*{Team Contributions}
 
-Write in this section a few sentences describing the contributions of each team member. What did each member work on? Refer to item 7.
+Om led the model development and implementation process, including data preprocessing, feature engineering, and training the XGBoost classifier. He also integrated the calibration and evaluation framework and coordinated the A~$\rightarrow$~B~$\rightarrow$~C pipeline design.
+
+Gregory focused on exploratory data analysis, dataset cleaning, and the construction of participant-level profiles. He was responsible for identifying key features from the survey data and preparing visualizations and summary statistics used in both the report and presentation materials.
+
+Alvin contributed to the experimental design and evaluation setup, helping define baseline comparisons and select appropriate performance metrics. He also supported documentation, result interpretation, and report writing, ensuring clarity and consistency across all sections.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
@@ -224,13 +222,20 @@ Write in this section a few sentences describing the contributions of each team 
 % Custom bibliography entries only
 \bibliography{custom}
 
-\newpage
+\clearpage
+\onecolumn
 \section*{Tables and Figures}
 
-Table~\ref{tab:top10-recommendations} shows the top 10 recommended partners for a sample participant A, ranked by predicted compatibility score (p\_AB). The table illustrates the model's ability to identify high-potential matches based on pre-event survey data.
+% Table~\ref{tab:top10-recommendations} shows the top 10 recommended partners for a sample participant A, ranked by predicted compatibility score (p\_AB). The table illustrates the model's ability to identify high-potential matches based on pre-event survey data.
+\begin{figure}[H]
+  \raggedright
+  \includegraphics[width= \textwidth]{plots/true_false_positives.png}
+  \caption{Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives.}
+  \label{fig:true-false-positives}
+\end{figure}
 
-\begin{table*}[t]
-\centering
+\begin{table}[H]
+\raggedright
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}cccccccccccccccc@{}}
@@ -249,14 +254,14 @@ Table~\ref{tab:top10-recommendations} shows the top 10 recommended partners for 
 383 & F & 22 & Eur. & Social Work & 6 & 8 & 8 & 8 & 8 & 7 & 10 & 8 & 6 & 10 & 0.64 \\
 \hline
 \end{tabular}
-\caption{Top 10 recommended partners for sample participant A. Abbreviations: Gen.=Gender, Att.=Attractive, Sin.=Sincere, Int.=Intelligence, Fun.=Funny, Amb.=Ambition, Spo.=Sports, Mus.=Music, Mov.=Movies, Rea.=Reading, Exe.=Exercise, Eur.=European/Caucasian-American, Lat.=Latino/Hispanic, Oth.=Other, Comm.=Communications, Ed.=Education, Lit.=Literature.}
+\caption{Top 10 recommended partners for sample participant A.}
 \label{tab:top10-recommendations}
-\end{table*}
+\end{table}
 
-Table~\ref{tab:composite-profile} presents the composite profile B*, constructed by averaging the characteristics of the top 10 recommended partners shown in Table~\ref{tab:top10-recommendations}. This aggregated profile represents the ``ideal partner type'' that participant A would most likely prefer, based on the model's predictions.
+% Table~\ref{tab:composite-profile} presents the composite profile B*, constructed by averaging the characteristics of the top 10 recommended partners shown in Table~\ref{tab:top10-recommendations}. This aggregated profile represents the ``ideal partner type'' that participant A would most likely prefer, based on the model's predictions.
 
-\begin{table}[h]
-\centering
+\begin{table}[H]
+\raggedright
 \begin{tabular}{@{}lr@{}}
 \hline
 \textbf{Attribute} & \textbf{Value} \\
