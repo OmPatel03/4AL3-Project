@@ -110,32 +110,79 @@ The raw dataset required significant preprocessing. Our pipeline performs the fo
 
 \section{Features}
 
-The model inputs were derived exclusively from pre-event survey responses in the Speed Dating dataset to ensure fairness and avoid post-event leakage. Each training example represents a pairing between two participants (A and B), with features combining demographic, self-assessment, and preference information from both sides. Using only pre-date data ensures that the model learns compatibility patterns rather than reactions or biases formed during the actual event.
+Our model inputs were derived entirely from pre-event survey responses in the Speed Dating dataset to avoid post-event leakage and ensure that predictions reflected true compatibility rather than impressions formed during the event. Each training example represents a pairing between two participants (A and B), and the model receives features describing both individuals. This allows the classifier to learn relationships between what A wants in a partner and how B presents themselves, as well as broader patterns of interpersonal compatibility.
 
-For participant A, features included demographic attributes (age, gender, race, and field of study), self-ratings (attractive, sincere, intelligence, funny, ambition), personal interests (e.g., sports, music, movies, reading, exercise, hiking, art, shopping), and stated partner preferences (attractive\_important, sincere\_important, etc.). For participant B, corresponding partner features were used, including demographic information (age\_o, gender\_o, race\_o), self-ratings (attractive\_o, sincere\_o, intelligence\_o, funny\_o, ambitious\_o), and stated partner preferences (pref\_o\_attractive, pref\_o\_sincere, etc.). This alignment allowed the model to learn the relationship between what A looks for in a partner and how B describes themselves, creating a symmetric and interpretable feature space.
+\subsection{Base Feature Set}
 
-Feature engineering included converting all byte-encoded categorical fields to strings, coercing numeric columns to float representations, and one-hot encoding categorical attributes. Derived attributes such as age difference and same-race indicators were added to capture potential compatibility signals. Missing demographic or preference values were imputed using the mode for categorical features and the median for numerical ones to maintain data consistency without distorting distributional properties. All numerical features were normalized to a [0,1] range to ensure balanced model learning, particularly for tree-based methods that may otherwise overweight higher-magnitude attributes.
+For participant A, we included demographic attributes (age, gender, race, field of study), self-assessment ratings (attractive, sincere, intelligent, funny, ambitious), personal interests (e.g., sports, music, movies, reading, exercise, hiking, art, shopping), and stated partner preferences (such as \texttt{attractive\_important} and \texttt{sincere\_important}). For participant B, we incorporated the corresponding partner-side features: demographic attributes (age\_o, gender\_o, race\_o), self-ratings (\texttt{attractive\_o}, \texttt{sincere\_o}, \texttt{intelligence\_o}, etc.), and B's stated preferences for a partner (\texttt{pref\_o\_attractive}, \texttt{pref\_o\_sincere}, etc.). This symmetry ensures that the model observes both what A is seeking and what B offers.
 
-No explicit dimensionality reduction or learned embeddings were applied at this stage, as the dataset’s moderate size made full feature inclusion tractable. However, future iterations may experiment with principal component analysis (PCA) or learned latent embeddings to capture higher-order interactions between traits. We also plan to use model-based feature importance scores (e.g., from XGBoost or SHAP values) to identify redundant or weakly predictive inputs and better interpret the contribution of personality versus demographic variables to match likelihood. These interpretive tools will guide future pruning and feature weighting decisions, improving both transparency and model efficiency.
+Categorical variables were decoded from byte strings and then one-hot encoded. Numeric values were coerced into consistent formats, but no scaling was required since tree-based models are insensitive to feature magnitude.
+
+\subsection{Interaction and Augmented Features}
+
+In addition to the base features, we experimented with an augmented ``rich'' feature set that incorporated all non-leaky \texttt{d\_*} interaction columns present in the dataset. These columns encode differences between A and B along various traits, such as \texttt{d\_age}, \texttt{d\_attractive}, \texttt{d\_funny}, and \texttt{d\_music}. Including these relative-difference features is motivated by the literature on mate selection, which emphasizes alignment and distance between partners rather than absolute traits alone. Our ablation results confirmed this intuition: the model performed substantially better when interaction features were included.
+
+\subsection{Rationale}
+
+It is natural to include both absolute features (e.g., age, interests, personality) and relative features (e.g., age gap, rating differences), since attraction depends simultaneously on individual attributes and their compatibility. Partner preference variables (\texttt{\_important} and \texttt{pref\_o\_}) were included because prior psychological studies show that stated preferences predict real choices to a moderate degree. Interest-based features were included because similarity in hobbies has been shown to influence perceived compatibility.
+
+\subsection{Feature Experiments}
+
+We compared two main feature configurations:
+
+\begin{enumerate}
+    \item \textbf{Base Pre-Event Features}—demographics, interests, self-ratings, and preference indicators.
+    \item \textbf{Augmented Features with Interaction Deltas}—the base set plus all non-leaky \texttt{d\_*} difference features.
+\end{enumerate}
+
+This variation allowed us to directly measure the contribution of relational features. Models trained on the rich feature set consistently outperformed those trained on the base set, indicating that the differences between A and B were critical for accurate prediction.
+
+No dimensionality reduction or learned embeddings were used, as the feature dimensionality was manageable and tree-based models naturally handle large sparse inputs. Future work may explore representation learning or feature pruning informed by model-based importance scores (e.g., SHAP values) to improve interpretability.
 
 
 \section{Implementation}
 
-We implemented a binary classification model to predict whether a participant (A) would say ``yes'' to another participant (B) using pre-event survey data from the Speed Dating dataset. The target label is the \texttt{decision} column, where 1 indicates ``yes'' and 0 indicates ``no.'' The modeling process was designed to ensure reproducibility, fairness, and the avoidance of post-event data leakage.
+We implemented a series of binary classification models to predict whether a participant (A) would say ``yes'' to another participant (B) using only pre-event survey features from the Speed Dating dataset. The prediction target is the \texttt{decision} label, where 1 indicates a positive response and 0 a negative one. All modeling decisions were made to prevent post-event leakage and ensure fair, reproducible evaluation. Although the broader goal of the project includes the A~$\rightarrow$~B~$\rightarrow$~C pipeline for analyzing multi-stage compatibility patterns, the implementation described here focuses on building the core predictive model that underlies that pipeline.
 
-Our baseline model is a simple majority class predictor that always predicts ``no,'' achieving approximately 58\% accuracy. This baseline corresponds to the dataset’s natural class imbalance (58/42 split) and serves as a lower bound for meaningful model comparison.
+\subsection{Baselines}
 
-For our primary model, we used a calibrated XGBoost classifier, a gradient-boosted decision tree model known for its robustness to heterogeneous data types and ability to capture nonlinear feature interactions. The model was trained using binary cross-entropy (log loss) as the objective function, optimized via additive tree boosting. We performed hyperparameter tuning using randomized search over parameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators}, balancing predictive performance and overfitting risk. Early stopping was used with a validation patience of 50 rounds to halt training when no further improvement was observed.
+Our simplest baseline is a majority-class classifier that always predicts ``no.'' Since the dataset is imbalanced (approximately 58\% negative and 42\% positive decisions), this baseline achieves 58\% accuracy but an F1 score of 0. This provides a conservative lower bound and highlights the necessity of learning meaningful structure beyond class priors.
 
-To improve probability calibration, we applied isotonic regression on validation outputs so that predicted probabilities aligned more closely with empirical decision frequencies. This calibration step was important for interpretability, as our later analyses depend on comparing predicted likelihoods across simulated participants rather than binary outputs alone.
+As a stronger baseline, we trained a logistic regression model with one-hot encoded categorical variables. This model achieved modest improvements (accuracy $\approx$ 0.60, ROC-AUC $\approx$ 0.62), demonstrating that linear models capture some predictive structure but are insufficient for modeling the complex, nonlinear preference patterns in the dataset.
 
-The input features included both A’s and B’s pre-event survey responses: demographic variables (age, gender, race, and field of study), self-assessments (attractiveness, sincerity, intelligence, humor, ambition), personal interests, and partner preference indicators (\texttt{\_important} and \texttt{pref\_o\_}). Post-event attributes such as \texttt{like}, \texttt{match}, and \texttt{decision\_o} were excluded to prevent label leakage.
+\subsection{Primary Models}
 
-Data splits were performed at the participant level rather than by row, ensuring that information about any one participant did not appear in multiple sets. The data were divided into training (70\%), validation (15\%), and test (15\%) partitions. Model optimization followed XGBoost’s gradient-based boosting with learning rate scheduling, and results were tracked using both cross-validation and held-out evaluation.
+Our primary approach uses gradient-boosted decision trees. We experimented with two variants:
 
-Current results yield an accuracy of approximately 0.63, F1 score of 0.51, and ROC-AUC of 0.66, representing a clear improvement over the 0.58 baseline. Feature importance analysis shows that self-rated attractiveness, shared interests, and age difference are among the most influential predictors of a positive decision.
+\begin{itemize}
+    \item \textbf{HistGradientBoostingClassifier (HGB)}, a fast, histogram-based gradient-boosting model suitable for tabular data.
+    \item \textbf{XGBoost}, a state-of-the-art gradient-boosting framework offering strong regularization and flexible tree construction.
+\end{itemize}
 
-Implementation challenges primarily involved dataset cleaning and ensuring interpretability. Many categorical fields were stored as byte strings requiring decoding and normalization, and balancing explainability with model complexity remained an ongoing consideration. Future iterations will extend this framework into the A~$\rightarrow$~B~$\rightarrow$~C pipeline to simulate multi-stage preference dynamics and analyze how compatibility signals propagate across indirect match predictions.
+Both models were trained with the binary cross-entropy (log loss) objective, optimized via additive boosting. Hyperparameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators} were tuned through randomized search. Early stopping on a held-out validation set prevented overfitting and greatly reduced training time.
+
+Categorical variables were encoded using a \texttt{ColumnTransformer} with one-hot encoding, while numeric features were passed through unchanged. Since probability quality is important for downstream analysis, we applied isotonic regression to calibrate model outputs, ensuring that predicted probabilities accurately reflected empirical decision frequencies.
+
+\subsection{Feature Variants and Ablations}
+
+We evaluated two feature variants:
+
+\begin{enumerate}
+    \item \textbf{Base Feature Set:} demographics, self-ratings, preferences, and interests available from pre-event surveys.
+    \item \textbf{Rich Feature Set with Interaction Deltas:} an augmented feature set including all non-leaky interaction columns of the form \texttt{d\_*}, which quantify differences between A and B (e.g., age difference, rating gaps, interest mismatch).
+\end{enumerate}
+
+These ablations allowed us to isolate the contribution of interaction features. The interaction-enhanced model performed substantially better, indicating that relational differences between A and B are highly predictive of attraction decisions. These findings are consistent with prior literature on partner preference alignment.
+
+\subsection{Optimization Strategy}
+
+Participants were partitioned at the individual level to avoid having the same person appear in multiple splits. Data were divided into 70\% training, 15\% validation, and 15\% testing. All optimization followed XGBoost's gradient-boosting procedure, with subsampling-based regularization and early stopping to prevent overfitting. Model selection was based on validation ROC-AUC.
+
+\subsection{Results}
+
+Using the base feature set, our calibrated XGBoost model achieved accuracy $\approx$ 0.63, F1 $\approx$ 0.51, and ROC-AUC $\approx$ 0.66, outperforming both baselines. Incorporating interaction deltas led to a substantial improvement: the interaction-enhanced XGBoost model achieved accuracy $\approx$ 0.73, F1 $\approx$ 0.70, and ROC-AUC $\approx$ 0.80. These results demonstrate that gradient-boosted tree models effectively capture pre-event compatibility and provide a strong foundation for our planned A~$\rightarrow$~B~$\rightarrow$~C compatibility pipeline.
+
+While we implemented an initial version of the pipeline earlier in the project using a simpler model, the primary focus of this report is the construction and evaluation of the final predictive models themselves. The improved probability calibration and richer feature representations documented here position the model to support more reliable downstream analyses—including A’s top predicted partners (B), the composite “ideal partner” profile (B$^\ast$), and B$^\ast$’s preferred matches (C)—in future extensions of the project.
 
 
 \section{Results and Evaluation}
