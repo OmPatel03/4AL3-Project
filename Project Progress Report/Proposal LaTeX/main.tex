@@ -198,6 +198,71 @@ Evaluation focuses on standard binary classification metrics, including accuracy
 Ongoing work involves refining hyperparameters, experimenting with alternative model architectures, and expanding evaluation to include ranking-based metrics such as Precision@k. We also plan to incorporate SHAP-based feature importance analysis to better understand which demographic and personality factors most strongly influence predicted compatibility scores. Future iterations will integrate these insights into the A~$\rightarrow$~B~$\rightarrow$~C pipeline to evaluate how prediction quality scales in multi-stage matching.
 
 
+\section{Error Analysis}
+\label{sec:error-analysis}
+
+To better understand the behavior of our models beyond aggregate metrics, we performed a detailed error analysis on the held-out test set. We focus on three aspects: (1) how errors are distributed across classes and decision thresholds, (2) which feature patterns are associated with systematic mistakes, and (3) how error patterns change between the base feature set and the interaction-enhanced model.
+
+\subsection{Global Error Patterns}
+
+Using a fixed threshold of 0.5 on calibrated probabilities, the interaction-enhanced XGBoost model achieves substantially higher accuracy and F1 score than both the majority baseline and the calibrated XGBoost model trained only on the base pre-event features. However, the confusion matrix reveals that errors are not uniformly distributed.
+
+First, the model is conservative relative to the true label distribution. It correctly identifies most negative decisions, but the false negative rate remains higher than ideal, showing the fact that many successful dates correspond to situations where pre-event attributes appear only moderately favorable. This is consistent with the class imbalance in the dataset and the decision to optimize for overall F1 score instead of recall alone.
+
+Figure~\ref{fig:true-false-positives} shows the distribution of predicted probabilities for true positives and true negatives for the interaction-enhanced model. Correctly classified positives cluster near high scores, and correctly classified negatives cluster near low scores, which indicates that the model meaningfully separates the classes. Most misclassified examples lie in the ambiguous middle region around 0.4 to 0.6, which suggests that the model is mainly struggling on intrinsically hard or noisy cases rather than producing many highly confident errors.
+
+\subsection{False Positives vs. False Negatives}
+
+Qualitative inspection of individual pairings helps us to interpret the types of mistakes the model makes.
+
+\paragraph{False positives.} False positives often arise when participant A and B look highly compatible in terms of observable survey variables but A nevertheless chose ``no'' during the event. Typical patterns include:
+\begin{itemize}
+    \item B matches A's stated ideal partner profile (for example similar age, similar race, and high self ratings on attractiveness and fun),
+    \item A reports strong interest in activities that B also rates highly (for example music and movies), and
+    \item the interaction deltas (\texttt{d\_age}, \texttt{d\_attractive}, \texttt{d\_funny}, \texttt{d\_music}) are small.
+\end{itemize}
+In such cases the model assigns a high probability of a positive decision, yet the ground truth label is negative. This suggests that some errors are driven by factors that are not captured in the pre-event survey such as physical chemistry, mood, or subtle conversational dynamics. From a recommendation perspective these false positives are often still plausible matches, but they hurt measured precision.
+
+\paragraph{False negatives.} False negatives frequently appear in situations where the pre-event features suggest only moderate compatibility:
+\begin{itemize}
+    \item A and B differ substantially on one or more self ratings (for example A rates themselves highly on ambition while B does not),
+    \item there are noticeable gaps in interests (for example A reports high interest in sports while B reports low sports interest), or
+    \item A's stated partner preferences emphasize traits that B only weakly exhibits.
+\end{itemize}
+Despite these apparent mismatches, the ground truth label is positive. Here, the model tends to predict ``no'' because it treats these misalignments as evidence against compatibility. This behavior indicates that the model has learned strong priors about trait alignment and may underweight idiosyncratic cases where attraction occurs despite measurable differences.
+
+\subsection{Feature-Dependent Error Patterns}
+
+We next analyzied how error rates vary as a function of key feature groups.
+
+\paragraph{Preference gap and interaction deltas.} The addition of interaction features (\texttt{d\_*}) substantially reduces errors where A and B are similar on absolute traits but differ in relative preferences. The base XGBoost model, which only sees separate A and B features, often misclassifies pairs where both individuals have generally high self ratings but value different traits in partners. The interaction-enhanced model corrects many of these mistakes by explicitly modeling gaps such as cases where A strongly values sincerity while B places more emphasis on fun. Remaining errors in this category typically involve medium-sized deltas where the model is uncertain.
+
+\paragraph{Participant heterogeneity.} Some participants are more difficult to model than others. Participants who say ``yes'' extremely rarely or extremely often create skewed local label distributions. For example, very selective participants generate many negative labels even for objectively strong candidates, which leads the model to overpredict ``yes'' in rare instances when they do accept a partner. On the other hand, participants who say ``yes'' to almost everyone cause the model to underpredict ``no'' for the few pairings they reject. This effect is partially mitigated by splitting data at the participant level and by including individual-level preferences, but it does not fully go away.
+
+\paragraph{Demographic subgroups.} When grouping errors by demographic attributes, we observe that performance is strongest in well-represented subgroups such as younger participants in the most common racial categories and fields of study. Error rates are higher for older participants and under-represented demographic groups, where the model has fewer examples from which to learn stable patterns. This is an expected limitation given the dataset size and distribution and suggests that some predictions may be less reliable for small subpopulations.
+
+\subsection{Comparison Across Models}
+
+Comparing error patterns across models highlights how modeling choices affect behavior. Figure~\ref{fig:metric-bars-base-vs-rich} summarizes their test-set metrics.
+
+\begin{itemize}
+    \item The majority baseline achieves high accuracy on the negative class but has zero recall on positive decisions. All its errors are false negatives, so it is unusable as a recommender.
+    \item The calibrated XGBoost model trained on the base feature set improves substantially over the majority classifier but still treats many ambiguous cases as negative. Without interaction features it struggles when compatibility depends on relative differences between A and B rather than absolute traits alone.
+    \item The interaction-enhanced XGBoost model reduces both false positives and false negatives relative to these baselines, with the largest gains on pairs where compatibility is driven by nuanced tradeoffs between attractiveness, fun, sincerity, and shared interests. As shown in Figure~\ref{fig:roc-calib-base-vs-rich}, it also dominates the base model in ROC space and has better-calibrated probabilities.
+\end{itemize}
+
+\subsection{Opportunities for Improvement}
+
+The observed error patterns suggest several concrete extensions if we were to continue this work:
+\begin{itemize}
+    \item \textbf{Cost-sensitive training.} Assigning a higher loss weight to positive examples could reduce false negatives at the cost of tolerating more false positives. This may be acceptable for a recommender that aims to avoid missing promising matches.
+    \item \textbf{Participant-specific calibration.} Calibrating probabilities separately for each participant, or adding explicit per-participant bias terms, could better account for individual differences in selectivity and reduce systematic errors for very selective or very permissive users.
+\end{itemize}
+
+Overall, the error analysis indicates that the current model captures many regularities in pre-event compatibility but remains limited by label noise, participant heterogeneity, and sparse coverage for minority subgroups. The proposed extensions target these specific weaknesses and provide a roadmap for increasing both predictive performance and fairness in future iterations.
+
+
+
 
 \section{Feedback and Plans}
 
@@ -329,6 +394,21 @@ Field & Social Work \\
 \caption{Composite profile B* derived by averaging the top 10 recommended partners for participant A. Numeric values represent means across all candidates; categorical values represent the mode (most common value).}
 \label{tab:composite-profile}
 \end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{plots/updated_graphs.png}
+  \caption{Comparison of ROC (left) and calibration (right) curves for calibrated XGBoost models using the base feature set and the base plus interaction feature set. The interaction-enhanced model achieves a higher ROC-AUC and a reliability curve closer to the diagonal.}
+  \label{fig:roc-calib-base-vs-rich}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{plots/comparison_bar_chart.png}
+  \caption{Test-set metric comparison for the base and interaction-enhanced XGBoost models. Bars show accuracy, precision, recall, F1, and ROC-AUC, all of which improve when interaction features are included.}
+  \label{fig:metric-bars-base-vs-rich}
+\end{figure}
+
 
 % \appendix
 
