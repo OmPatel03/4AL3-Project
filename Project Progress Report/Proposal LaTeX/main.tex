@@ -29,7 +29,7 @@
 \title{Group 51 Progress Report:\\The Optimal Match Model: Predicting Ideal Partner with ML}
 
 
-\author{Alvin Qian , Om Patel, Gregory Archer\\
+\author{Alvin Qian , Om Patel, Gregory Archer \\
   \texttt{\{qiana2,patelo11,archeg1\}@mcmaster.ca} }
 
 
@@ -78,7 +78,7 @@
 
 \section{Introduction}
 
-Online dating platforms often optimize for engagement metrics such as clicks, swipes, or stated preferences rather than genuine mutual compatibility. Many systems therefore prioritize popularity or activity rather than understanding the bidirectional nature of attraction. In this project, we study the problem of predicting an individual's ideal partner profile from structured demographic, preference, and rating data. Our goal is not only to identify who a person is likely to say ``yes'' to but also to infer what kind of person would, in turn, find them compatible.
+Online dating platforms often optimize for engagement metrics such as clicks, swipes, or stated preferences rather than genuine mutual compatibility. Many systems therefore prioritize popularity or activity rather than understanding the bidirectional nature of attraction. Prior work on the Columbia Speed Dating data showed that attractiveness, fun, and shared interests were especially predictive of mutual choice \citep{Fisman:2006}, while meta-analyses found that stated ideals carry only moderate predictive power \citep{Eastwick:2014}. In this project, we study the problem of predicting an individual's ideal partner profile from structured demographic, preference, and rating data. Our goal is not only to identify who a person is likely to say ``yes'' to but also to infer what kind of person would, in turn, find them compatible.
 
 Given a participant A, our model predicts the set of individuals A would likely respond positively to, based on their recorded preferences and historical choices. From the top-$k$ candidates, we generate a composite partner profile $B^*$ representing the aggregated traits of A’s most desired matches. The model then predicts who $B^*$ would be most likely to say ``yes'' to, forming another representative profile $C^*$. Comparing A and $C^*$, referred to as the preference gap, highlights asymmetries between what an individual seeks and what those they desire tend to prefer. This framing offers insight into unreciprocated attraction and the dynamics of compatibility, while providing both recommendation value and interpretability.
 
@@ -93,13 +93,11 @@ The task is formulated as a binary classification problem (predicting the ``yes'
 
 
 \section{Related Work}
-
 Our work is informed by several research areas. The first is the original analysis of our dataset, the Columbia Speed Dating Experiment, where Fisman and Iyengar found that attractiveness, fun, and shared interests were highly predictive of matching decisions \citep{Fisman:2006}. Second, our A→B→C loop concept is inspired by two-sided matching theory \citep{Roth:online}, most famously represented by the Gale–Shapley algorithm \citep{Gale:1962}, which underscores that stable matches must account for the preferences of both sides. 
 
 Third, our approach is related to the broader field of recommender systems, which often use collaborative or content-based filtering to predict preferences, though typically not in a two-hop ``preference gap'' framework; our evaluation strategy aligns with modern recommender system assessment practices \citep{Li:2020}. In particular, our use of ranking-based metrics such as Precision@k parallels the long-standing information retrieval literature on top-$k$ evaluation, where early foundational work by Järvelin and Kekäläinen established gain-based ranking metrics and motivated precision-oriented top-$k$ assessment \citep{jarvelin2002ir}.
 
 Fourth, we draw from psychological research on partner preferences, such as the meta-analysis by \citet{Eastwick:2014}, which reviewed the predictive validity of stated ideal partner preferences. Finally, given our goal of providing insights, our work connects to explainable AI (XAI) methods, such as SHAP \citep{Lundberg:2017}, which we plan to use to identify which features most influence compatibility predictions.
-
 \section{Dataset}
 
 We are using the Columbia Speed Dating dataset, as described in our proposal. It consists of \textbf{8,378 observations} (individual dates) and \textbf{123 columns}.
@@ -161,7 +159,7 @@ Our primary approach uses gradient-boosted decision trees. We experimented with 
 
 \begin{itemize}
     \item \textbf{HistGradientBoostingClassifier (HGB)}, a fast, histogram-based gradient-boosting model suitable for tabular data.
-    \item \textbf{XGBoost}, a state-of-the-art gradient-boosting framework offering strong regularization and flexible tree construction.
+    \item \textbf{XGBoost}, a state-of-the-art gradient-boosting framework offering strong regularization and flexible tree construction \citep{Chen:2016}.
 \end{itemize}
 
 Both models were trained with the binary cross-entropy (log loss) objective, optimized via additive boosting. Hyperparameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators} were tuned through randomized search. Early stopping on a held-out validation set prevented overfitting and greatly reduced training time.
@@ -255,6 +253,8 @@ remains strong at $k=3$ and gradually declines as the recommendation list
 expands, which is expected behavior for ranking metrics. Even at $k=10$, almost
 half of the returned candidates were true matches, indicating that the model is
 able to meaningfully prioritize compatible partners far above chance levels.
+
+
 \section{Error Analysis}
 \label{sec:error-analysis}
 
@@ -321,58 +321,20 @@ Overall, the error analysis indicates that the current model captures many regul
 
 
 
-\section{Progress Reflection}
+% \section{Feedback and Plans}
 
-Our final system remained closely aligned with the goals and methodology outlined
-in our original progress report, while also evolving in several important ways as
-our understanding of the dataset and modeling challenges deepened. Below, we
-reflect on the areas where we followed the planned trajectory and where we
-deviated to improve performance or feasibility. These comparisons are
-based on the commitments documented in our earlier progress report
-as well as the project design described in our project outline.
+% The feedback provided by our TA emphasized three key areas for improvement: establishing a clear baseline model for comparison, expanding evaluation metrics beyond accuracy and F1 score, and including more experimental details such as hyperparameters, visualizations, and training summaries. These points align well with our current development roadmap and will guide our next phase of work.
 
-\subsection{Adherence to the Original Plan}
+% First, we plan to formalize the baseline by implementing and reporting results for multiple simple models, such as logistic regression and decision trees, in addition to the majority-class predictor. This will help contextualize our XGBoost model’s performance and quantify improvement more concretely. We will also include baseline metrics in a results table for clarity.
 
-\paragraph{Leakage-free pre-event modeling.}
-From the start, we committed to using only pre-event survey features to avoid
-any contamination from post-date impressions. Our final models strictly adhered
-to this constraint, and all feature sets including the rich interaction
-features were constructed using only information available prior to the speed
-date. This followed the design principles of our initial report, which emphasized
-fairness, reproducibility, and the avoidance of post-event leakage.
+% Second, we aim to broaden our evaluation by incorporating additional performance metrics. In particular, we plan to include Precision@k and Mean Reciprocal Rank (MRR) to better capture the model’s ranking capability. Potentially the Brier score and reliability curves to evaluate calibration quality as well. These metrics will provide a more nuanced understanding of both predictive accuracy and probabilistic reliability, which are important for the planned A~$\rightarrow$~B~$\rightarrow$~C compatibility framework.
 
-\paragraph{Focus on A$\rightarrow$B decision prediction.}
-The progress report identified the A$\rightarrow$B decision classifier as the
-foundation for the entire pipeline, and our final system delivered a fully
-optimized version of this model. We completed the full evaluation suite we had
-outlined, including accuracy, precision, recall, F1, and ROC-AUC, fulfilling our
-original modeling goals.
+% Third, we will expand the experimental section to include visual and quantitative summaries of model behavior. Planned additions include feature importance plots from XGBoost and SHAP, learning curves showing convergence trends, and calibration plots comparing predicted and observed probabilities. These visualizations will make our analysis more interpretable and strengthen the report’s empirical depth.
 
-\paragraph{Use of gradient-boosted decision trees.}
-We initially proposed XGBoost as our primary model because of its ability to
-capture nonlinear interactions in heterogeneous data. Our final implementation
-remained faithful to this choice and expanded upon it with calibration through
-isotonic regression, as originally planned. We also implemented the simpler HGB
-baseline exactly as described in the earlier report.
+% Finally, we recognize opportunities to refine the implementation itself. We intend to conduct more extensive hyperparameter tuning using randomized or Bayesian optimization, experiment with additional ensemble models (e.g., LightGBM or CatBoost), and evaluate whether dimensionality reduction or latent embeddings improve performance. We also plan to explore balancing techniques such as class weighting or SMOTE to mitigate the dataset’s inherent imbalance.
 
-\paragraph{Integration of interaction (delta) features.}
-The earlier report anticipated adding interaction features capturing pairwise
-differences (e.g., age gap, rating gaps, shared traits). In the final work we not
-only implemented these but expanded them substantially, incorporating all
-non-leaky \texttt{d\_*} features present in the dataset. This expansion proved to
-be the key driver of improved predictive performance, validating our initial
-hypothesis that compatibility is fundamentally relational.
+% Overall, the TA’s feedback provided clear and actionable directions. Our remaining work will focus on strengthening the experimental rigor, improving interpretability, and extending the analysis to the full A~$\rightarrow$~B~$\rightarrow$~C pipeline. These steps will help ensure that our final model is both robust and explainable, providing a more comprehensive understanding of human compatibility prediction.
 
-\subsection{Where We Deviated From or Expanded Upon the Original Plan}
-
-\paragraph{Model variety and planned alternatives.}
-The progress report discussed experimenting with logistic regression, decision
-trees, LightGBM, and CatBoost. In practice, we discovered that implementing and
-optimizing multiple additional models provided diminishing returns relative to
-investing more effort into XGBoost feature engineering and calibration.
-Therefore, we focused on two strong baselines (majority-class and HGB) and two
-XGBoost-based systems (base and interaction-enhanced), deviating from the
-original expectation of a broader model comparison.
 
 
 % \begin{figure}[t]
@@ -414,11 +376,11 @@ original expectation of a broader model comparison.
 
 \section*{Team Contributions}
 
-Om led the model development and implementation process, including data preprocessing, feature engineering, and training the XGBoost classifier. He also integrated the calibration and evaluation framework and coordinated the A~$\rightarrow$~B~$\rightarrow$~C pipeline design.
+Om led the development of the predictive models, including data preprocessing, feature engineering, and implementation of the gradient-boosted tree classifiers. He conducted the ablation studies, implemented probability calibration, and integrated the feature variants used in the final experiments. Om also contributed to the design of the A~$\rightarrow$~B~$\rightarrow$~C compatibility pipeline and authored major portions of the technical sections of the report.
 
-Gregory focused on exploratory data analysis, dataset cleaning, and the construction of participant-level profiles. He was responsible for identifying key features from the survey data and preparing visualizations and summary statistics used in both the report and presentation materials.
+Gregory was responsible for exploratory data analysis, dataset cleaning, and construction of participant-level profile representations used throughout the project. He identified relevant survey features, assisted in organizing the pairing-based input format, and produced visualizations that informed model selection and evaluation. Gregory also contributed to interpreting model outputs and preparing supporting figures for the final report.
 
-Alvin contributed to the experimental design and evaluation setup, helping define baseline comparisons and select appropriate performance metrics. He also supported documentation, result interpretation, and report writing, ensuring clarity and consistency across all sections.
+Alvin contributed to the experimental design and evaluation methodology, helping define baseline models, select appropriate performance metrics, and structure the train/validation/test splitting strategy. He assisted with documentation, report writing, and result interpretation, ensuring that the analysis remained clear, coherent, and aligned with the project goals.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
