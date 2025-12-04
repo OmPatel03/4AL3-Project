@@ -159,7 +159,7 @@ Our primary approach uses gradient-boosted decision trees. We experimented with 
 
 \begin{itemize}
     \item \textbf{HistGradientBoostingClassifier (HGB)}, a fast, histogram-based gradient-boosting model suitable for tabular data.
-    \item \textbf{XGBoost}, a state-of-the-art gradient-boosting framework offering strong regularization and flexible tree construction \citep{Chen:2016}.
+    \item \textbf{XGBoost}, a state-of-the-art gradient-boosting framework offering strong regularization and flexible tree construction.
 \end{itemize}
 
 Both models were trained with the binary cross-entropy (log loss) objective, optimized via additive boosting. Hyperparameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators} were tuned through randomized search. Early stopping on a held-out validation set prevented overfitting and greatly reduced training time.
