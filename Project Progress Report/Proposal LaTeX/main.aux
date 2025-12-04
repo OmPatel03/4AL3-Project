@@ -3,24 +3,70 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{Fisman:2006}
 \citation{Roth:online}
+\citation{Gale:1962}
+\citation{Li:2020}
+\citation{jarvelin2002ir}
 \citation{Eastwick:2014}
+\citation{Lundberg:2017}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{1}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Dataset}{1}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Preprocessing and Cleaning}{1}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Preprocessing and Cleaning}{2}{subsection.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Features}{2}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Implementation}{2}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Results and Evaluation}{3}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Feedback and Plans}{3}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Base Feature Set}{2}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Interaction and Augmented Features}{2}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Rationale}{2}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Feature Experiments}{2}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Implementation}{3}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Baselines}{3}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Primary Models}{3}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Feature Variants and Ablations}{3}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Optimization Strategy}{3}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Results}{4}{subsection.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Results and Evaluation}{4}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Baselines}{4}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Base XGBoost Model}{4}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Interaction-Enhanced (Rich) XGBoost Model}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Ranking Performance (Precision@k)}{5}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Error Analysis}{5}{section.7}\protected@file@percent }
+\newlabel{sec:error-analysis}{{7}{5}{Error Analysis}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Global Error Patterns}{5}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}False Positives vs. False Negatives}{5}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{False positives.}{5}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{False negatives.}{6}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Feature-Dependent Error Patterns}{6}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Preference gap and interaction deltas.}{6}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Participant heterogeneity.}{6}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Demographic subgroups.}{6}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Comparison Across Models}{6}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Opportunities for Improvement}{7}{subsection.7.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Progress Reflection}{7}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Adherence to the Original Plan}{7}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Leakage-free pre-event modeling.}{7}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Focus on A$\rightarrow $B decision prediction.}{7}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Use of gradient-boosted decision trees.}{7}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Integration of interaction (delta) features.}{7}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Where We Deviated From or Expanded Upon the Original Plan}{7}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Model variety and planned alternatives.}{7}{section*.10}\protected@file@percent }
 \bibdata{custom}
 \bibcite{Eastwick:2014}{{1}{2014}{{Eastwick et~al.}}{{Eastwick, Luchies, Finkel, and Hunt}}}
-\bibcite{Roth:online}{{2}{n.d.}{{Roth}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives.}}{5}{figure.caption.4}\protected@file@percent }
+\bibcite{Fisman:2006}{{2}{2006}{{Fisman et~al.}}{{Fisman, Iyengar, Kamenica, and Simonson}}}
+\bibcite{Gale:1962}{{3}{1962}{{Gale and Shapley}}{{}}}
+\bibcite{jarvelin2002ir}{{4}{2002}{{J{\"a}rvelin and Kek{\"a}l{\"a}inen}}{{}}}
+\bibcite{Li:2020}{{5}{2020}{{Li et~al.}}{{Li, Karatzoglou, Chen, and Zeng}}}
+\bibcite{Lundberg:2017}{{6}{2017}{{Lundberg and Lee}}{{}}}
+\bibcite{Roth:online}{{7}{n.d.}{{Roth}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives.}}{9}{figure.caption.14}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:true-false-positives}{{1}{5}{Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives}{figure.caption.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Top 10 recommended partners for sample participant A.}}{5}{table.caption.5}\protected@file@percent }
-\newlabel{tab:top10-recommendations}{{1}{5}{Top 10 recommended partners for sample participant A}{table.caption.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Composite profile B* derived by averaging the top 10 recommended partners for participant A. Numeric values represent means across all candidates; categorical values represent the mode (most common value).}}{5}{table.caption.6}\protected@file@percent }
-\newlabel{tab:composite-profile}{{2}{5}{Composite profile B* derived by averaging the top 10 recommended partners for participant A. Numeric values represent means across all candidates; categorical values represent the mode (most common value)}{table.caption.6}{}}
-\gdef \@abspage@last{5}
+\newlabel{fig:true-false-positives}{{1}{9}{Distribution of predicted probabilities by actual outcome, showing the model's ability to discriminate between true positives and true negatives}{figure.caption.14}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Top 10 recommended partners for sample participant A.}}{9}{table.caption.15}\protected@file@percent }
+\newlabel{tab:top10-recommendations}{{1}{9}{Top 10 recommended partners for sample participant A}{table.caption.15}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Composite profile B* derived by averaging the top 10 recommended partners for participant A. Numeric values represent means across all candidates; categorical values represent the mode (most common value).}}{9}{table.caption.16}\protected@file@percent }
+\newlabel{tab:composite-profile}{{2}{9}{Composite profile B* derived by averaging the top 10 recommended partners for participant A. Numeric values represent means across all candidates; categorical values represent the mode (most common value)}{table.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Comparison of ROC (left) and calibration (right) curves for calibrated XGBoost models using the base feature set and the base plus interaction feature set. The interaction-enhanced model achieves a higher ROC-AUC and a reliability curve closer to the diagonal.}}{10}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:roc-calib-base-vs-rich}{{2}{10}{Comparison of ROC (left) and calibration (right) curves for calibrated XGBoost models using the base feature set and the base plus interaction feature set. The interaction-enhanced model achieves a higher ROC-AUC and a reliability curve closer to the diagonal}{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Test-set metric comparison for the base and interaction-enhanced XGBoost models. Bars show accuracy, precision, recall, F1, and ROC-AUC, all of which improve when interaction features are included.}}{10}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:metric-bars-base-vs-rich}{{3}{10}{Test-set metric comparison for the base and interaction-enhanced XGBoost models. Bars show accuracy, precision, recall, F1, and ROC-AUC, all of which improve when interaction features are included}{figure.caption.18}{}}
+\gdef \@abspage@last{10}

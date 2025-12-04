@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1762915894.53086 "main.aux" "main.bbl" "main" 1762915895.51775 0
-  "./acl_natbib.bst" 1762721526.86391 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
-  "./custom.bib" 1762895791.91487 761 3cac5d21a25e4572919cb0cbcbb6fcb4 ""
-  "main.aux" 1762915895.26855 2706 cd22a8d0ce728bf3e0fa19757b80b7a7 "pdflatex"
+["bibtex main"] 1764867206.62894 "main.aux" "main.bbl" "main" 1764867207.75222 0
+  "./acl_natbib.bst" 1764795795.27248 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
+  "./custom.bib" 1764867134.77249 3111 3099797918df605ac8e38eeda831d4d9 ""
+  "main.aux" 1764867207.49689 8462 370f963fd43e4fae2ae0039195cd4468 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1762915894.63321 "/Users/alvin/Programming/School/4AL3/4AL3-Project/Project Progress Report/Proposal LaTeX/main.tex" "main.pdf" "main" 1762915895.51788 0
-  "/Users/alvin/Programming/School/4AL3/4AL3-Project/Project Progress Report/Proposal LaTeX/main.tex" 1762915894.37504 23212 0e1df39648cfd1ec37f072725188d3c7 ""
+["pdflatex"] 1764867206.7272 "/Users/gregoryarcher/4AL3-Project-2/Project Progress Report/Proposal LaTeX/main.tex" "main.pdf" "main" 1764867207.75235 0
+  "/Users/gregoryarcher/4AL3-Project-2/Project Progress Report/Proposal LaTeX/main.tex" 1764867202.99769 38480 eacac0331af0ceae4037ddfdcee7452c ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1558214095 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
@@ -43,6 +43,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/latex-fonts/lasy8.tfm" 1136768653 520 7bb3abb160b19e0ed6ac404bb59052b7 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/latex-fonts/lasy9.tfm" 1136768653 520 1cc7cc05f4d7bae5c23bf7516f88fa52 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb" 1215737283 145929 f25e56369a345c4ff583b067cd87ce8e ""
@@ -124,15 +125,17 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty" 1727642399 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1655411236 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf" 1739380943 42148 61becc7c670cd061bb319c643c27fdd4 ""
-  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1758571055 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
+  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1762896902 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "acl.sty" 1762721526.86319 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "main.aux" 1762915895.26855 2706 cd22a8d0ce728bf3e0fa19757b80b7a7 "pdflatex"
-  "main.bbl" 1762915894.6306 666 6925879952219c3b8e6f2990622845c6 "bibtex main"
-  "main.out" 1762915895.26927 974 c5e321cac87923730bc32f4aa0428735 "pdflatex"
-  "main.tex" 1762915894.37504 23212 0e1df39648cfd1ec37f072725188d3c7 ""
-  "plots/true_false_positives.png" 1762893681.17111 58050 b870c4bac0cb43f4aa407ec933f13a23 ""
+  "acl.sty" 1764795795.27231 11615 e2c027f483aa40e577ed34264c8b0655 ""
+  "main.aux" 1764867207.49689 8462 370f963fd43e4fae2ae0039195cd4468 "pdflatex"
+  "main.bbl" 1764867206.72501 2188 758491f544a840c36ad98c82a59893ee "bibtex main"
+  "main.out" 1764867207.49767 4833 b3c3c72ba7ae70392ab7bc11138e142e "pdflatex"
+  "main.tex" 1764867202.99769 38480 eacac0331af0ceae4037ddfdcee7452c ""
+  "plots/comparison_bar_chart.png" 1764817605.34048 18732 e7d488ef02edc02905a9f3207fee00a1 ""
+  "plots/true_false_positives.png" 1764795795.27566 58050 b870c4bac0cb43f4aa407ec933f13a23 ""
+  "plots/updated_graphs.png" 1764817605.34266 61802 d0203889e88dd175611be48924d3b1b9 ""
   (generated)
   "main.aux"
   "main.log"

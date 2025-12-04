@@ -29,7 +29,7 @@
 \title{Group 51 Progress Report:\\The Optimal Match Model: Predicting Ideal Partner with ML}
 
 
-\author{Alvin Qian , Om Patel, Gregory Archer \\
+\author{Alvin Qian , Om Patel, Gregory Archer\\
   \texttt{\{qiana2,patelo11,archeg1\}@mcmaster.ca} }
 
 
@@ -94,7 +94,12 @@ The task is formulated as a binary classification problem (predicting the ``yes'
 
 \section{Related Work}
 
-Our work is informed by several research areas. The first is the original analysis of our dataset, the Columbia Speed Dating Experiment, where Fisman and Iyengar found that attractiveness, fun, and shared interests were highly predictive of matching decisions. Second, our A→B→C loop concept is inspired by two-sided matching theory \citep{Roth:online}, most famously represented by the Gale-Shapley algorithm, which underscores that stable matches must account for the preferences of both sides. Third, our approach is related to the broader field of recommender systems, which often use collaborative or content-based filtering to predict preferences, though typically not in a two-hop "preference gap" framework. Fourth, we draw from psychological research on partner preferences, such as the meta-analysis by \citet{Eastwick:2014}, which reviewed the predictive validity of stated ideal partner preferences. Finally, given our goal of providing insights, our work connects to explainable AI (XAI) methods, such as SHAP, which we plan to use to identify which features most influence compatibility predictions.
+Our work is informed by several research areas. The first is the original analysis of our dataset, the Columbia Speed Dating Experiment, where Fisman and Iyengar found that attractiveness, fun, and shared interests were highly predictive of matching decisions \citep{Fisman:2006}. Second, our A→B→C loop concept is inspired by two-sided matching theory \citep{Roth:online}, most famously represented by the Gale–Shapley algorithm \citep{Gale:1962}, which underscores that stable matches must account for the preferences of both sides. 
+
+Third, our approach is related to the broader field of recommender systems, which often use collaborative or content-based filtering to predict preferences, though typically not in a two-hop ``preference gap'' framework; our evaluation strategy aligns with modern recommender system assessment practices \citep{Li:2020}. In particular, our use of ranking-based metrics such as Precision@k parallels the long-standing information retrieval literature on top-$k$ evaluation, where early foundational work by Järvelin and Kekäläinen established gain-based ranking metrics and motivated precision-oriented top-$k$ assessment \citep{jarvelin2002ir}.
+
+Fourth, we draw from psychological research on partner preferences, such as the meta-analysis by \citet{Eastwick:2014}, which reviewed the predictive validity of stated ideal partner preferences. Finally, given our goal of providing insights, our work connects to explainable AI (XAI) methods, such as SHAP \citep{Lundberg:2017}, which we plan to use to identify which features most influence compatibility predictions.
+
 \section{Dataset}
 
 We are using the Columbia Speed Dating dataset, as described in our proposal. It consists of \textbf{8,378 observations} (individual dates) and \textbf{123 columns}.
@@ -187,17 +192,69 @@ While we implemented an initial version of the pipeline earlier in the project u
 
 \section{Results and Evaluation}
 
-Model evaluation is ongoing, with current experiments focused on establishing baseline performance and validating the modeling pipeline. All results reported here are preliminary and based on the current version of the calibrated XGBoost classifier.
+We evaluated our models using a participant-level split of 70\% training, 15\% validation, and 15\% testing, ensuring that no individual appeared in multiple subsets. This prevents information leakage across splits and provides a fair basis for model comparison. All models were trained only on pre-event (pre-date) features, and probability outputs were calibrated using isotonic regression on the validation set.
 
-The dataset was divided into 70\% training, 15\% validation, and 15\% testing sets, split at the participant level to ensure that no individual appeared in multiple subsets. This setup prevents information leakage and provides an unbiased framework for model tuning and evaluation.
+\subsection{Baselines}
 
-We trained an XGBoost classifier using binary cross-entropy loss and applied isotonic calibration on validation predictions to improve probability reliability. Calibration quality was assessed using reliability curves and the Brier score, which provided early indications that the model’s predicted probabilities align reasonably well with observed outcomes.
+As a sanity check, we first considered a majority-class baseline that always predicts ``no.'' Because roughly 58\% of decisions in the dataset are negative, this baseline achieves 0.58 accuracy but an F1 score of 0, since it never predicts the positive class. This confirms that any useful system must go beyond class priors.
 
-Evaluation focuses on standard binary classification metrics, including accuracy, precision, recall, F1 score, and ROC-AUC. These metrics are being used to assess both discrimination ability and class balance. Preliminary results show an accuracy around 0.63, F1 score near 0.51, and ROC-AUC of approximately 0.66, which represents a moderate improvement over the 0.58 baseline from the majority-class predictor. While these numbers are expected to evolve with further tuning and feature refinement, they suggest that pre-event attributes carry meaningful predictive information.
+We then trained a \textbf{clean product-safe} model using a \texttt{HistGradientBoostingClassifier} (HGB) on the hand-selected feature set (\texttt{SAFE\_FEATURES}) combining A's demographics, self-ratings, interests, and partner preferences, plus a small set of interaction terms (\texttt{samerace}, \texttt{d\_age}, \texttt{interests\_correlate}, \texttt{importance\_same\_race}, \texttt{importance\_same\_religion}). This model achieved:
+\begin{itemize}
+    \item \textbf{Accuracy:} 0.6152
+    \item \textbf{Precision:} 0.5185
+    \item \textbf{Recall:} 0.4902
+    \item \textbf{F1 Score:} 0.5039
+    \item \textbf{ROC-AUC:} 0.6435
+\end{itemize}
+These results show that even a relatively simple tree-based model can capture non-trivial structure in the data, but its discriminative power remains limited.
 
-Ongoing work involves refining hyperparameters, experimenting with alternative model architectures, and expanding evaluation to include ranking-based metrics such as Precision@k. We also plan to incorporate SHAP-based feature importance analysis to better understand which demographic and personality factors most strongly influence predicted compatibility scores. Future iterations will integrate these insights into the A~$\rightarrow$~B~$\rightarrow$~C pipeline to evaluate how prediction quality scales in multi-stage matching.
+\subsection{Base XGBoost Model}
 
+Next, we trained an XGBoost-based A$\rightarrow$B model on the same clean feature set. Using the same participant-level split and isotonic calibration, the base XGBoost classifier achieved:
+\begin{itemize}
+    \item \textbf{Accuracy:} 0.6326
+    \item \textbf{Precision:} 0.5455
+    \item \textbf{Recall:} 0.4726
+    \item \textbf{F1 Score:} 0.5064
+    \item \textbf{ROC-AUC:} 0.6561
+\end{itemize}
+Compared to HGB, this model provides a modest gain in accuracy and ROC-AUC, but its F1 score remains similar. This suggests that, given only the base feature set, model choice alone yields limited improvements: the main bottleneck is the information content of the features, not the capacity of the classifier.
 
+\subsection{Interaction-Enhanced (Rich) XGBoost Model}
+
+To more directly model compatibility, we extended the feature space with a rich set of interaction deltas, including all non-leaky \texttt{d\_*} columns encoding pairwise differences in self-ratings, interests, and preferences. In total, we found 53 such interaction features, which were added on top of the original A and B attributes.
+
+The interaction-enhanced XGBoost model achieved the following metrics on the held-out test set:
+\begin{itemize}
+    \item \textbf{Accuracy:} 0.7286
+    \item \textbf{Precision:} 0.6272
+    \item \textbf{Recall:} 0.7877
+    \item \textbf{F1 Score:} 0.6984
+    \item \textbf{ROC-AUC:} 0.7990
+\end{itemize}
+This represents a substantial improvement over both the HGB baseline and the base XGBoost model. Accuracy increases by more than 0.09 absolute compared to the clean HGB model, and the F1 score rises from roughly 0.50 to 0.70. The high recall (0.7877) indicates that the model successfully recovers most of the positive decisions (successful dates), while the ROC-AUC close to 0.80 shows strong separability between compatible and incompatible pairs.
+
+\subsection{Ranking Performance (Precision@k)}
+
+While classification metrics evaluate a model's ability to predict individual
+decisions, real recommender systems must also produce high-quality \emph{ranked}
+suggestions. To assess this, we computed Precision@k for several values of $k$,
+measuring the proportion of true positive matches contained within each
+participant's top-$k$ recommended partners.
+
+Using the interaction-enhanced XGBoost model, we obtained:
+\begin{itemize}
+    \item \textbf{Precision@1:} 0.5926
+    \item \textbf{Precision@3:} 0.5926
+    \item \textbf{Precision@5:} 0.5481
+    \item \textbf{Precision@10:} 0.4511
+\end{itemize}
+These results show that nearly 60\% of participants most likely predicted match
+(top-1) corresponds to an actual positive decision in the dataset. Precision
+remains strong at $k=3$ and gradually declines as the recommendation list
+expands, which is expected behavior for ranking metrics. Even at $k=10$, almost
+half of the returned candidates were true matches, indicating that the model is
+able to meaningfully prioritize compatible partners far above chance levels.
 \section{Error Analysis}
 \label{sec:error-analysis}
 
@@ -264,20 +321,58 @@ Overall, the error analysis indicates that the current model captures many regul
 
 
 
-\section{Feedback and Plans}
+\section{Progress Reflection}
 
-The feedback provided by our TA emphasized three key areas for improvement: establishing a clear baseline model for comparison, expanding evaluation metrics beyond accuracy and F1 score, and including more experimental details such as hyperparameters, visualizations, and training summaries. These points align well with our current development roadmap and will guide our next phase of work.
+Our final system remained closely aligned with the goals and methodology outlined
+in our original progress report, while also evolving in several important ways as
+our understanding of the dataset and modeling challenges deepened. Below, we
+reflect on the areas where we followed the planned trajectory and where we
+deviated to improve performance or feasibility. These comparisons are
+based on the commitments documented in our earlier progress report
+as well as the project design described in our project outline.
 
-First, we plan to formalize the baseline by implementing and reporting results for multiple simple models, such as logistic regression and decision trees, in addition to the majority-class predictor. This will help contextualize our XGBoost model’s performance and quantify improvement more concretely. We will also include baseline metrics in a results table for clarity.
+\subsection{Adherence to the Original Plan}
 
-Second, we aim to broaden our evaluation by incorporating additional performance metrics. In particular, we plan to include Precision@k and Mean Reciprocal Rank (MRR) to better capture the model’s ranking capability. Potentially the Brier score and reliability curves to evaluate calibration quality as well. These metrics will provide a more nuanced understanding of both predictive accuracy and probabilistic reliability, which are important for the planned A~$\rightarrow$~B~$\rightarrow$~C compatibility framework.
+\paragraph{Leakage-free pre-event modeling.}
+From the start, we committed to using only pre-event survey features to avoid
+any contamination from post-date impressions. Our final models strictly adhered
+to this constraint, and all feature sets including the rich interaction
+features were constructed using only information available prior to the speed
+date. This followed the design principles of our initial report, which emphasized
+fairness, reproducibility, and the avoidance of post-event leakage.
 
-Third, we will expand the experimental section to include visual and quantitative summaries of model behavior. Planned additions include feature importance plots from XGBoost and SHAP, learning curves showing convergence trends, and calibration plots comparing predicted and observed probabilities. These visualizations will make our analysis more interpretable and strengthen the report’s empirical depth.
+\paragraph{Focus on A$\rightarrow$B decision prediction.}
+The progress report identified the A$\rightarrow$B decision classifier as the
+foundation for the entire pipeline, and our final system delivered a fully
+optimized version of this model. We completed the full evaluation suite we had
+outlined, including accuracy, precision, recall, F1, and ROC-AUC, fulfilling our
+original modeling goals.
 
-Finally, we recognize opportunities to refine the implementation itself. We intend to conduct more extensive hyperparameter tuning using randomized or Bayesian optimization, experiment with additional ensemble models (e.g., LightGBM or CatBoost), and evaluate whether dimensionality reduction or latent embeddings improve performance. We also plan to explore balancing techniques such as class weighting or SMOTE to mitigate the dataset’s inherent imbalance.
+\paragraph{Use of gradient-boosted decision trees.}
+We initially proposed XGBoost as our primary model because of its ability to
+capture nonlinear interactions in heterogeneous data. Our final implementation
+remained faithful to this choice and expanded upon it with calibration through
+isotonic regression, as originally planned. We also implemented the simpler HGB
+baseline exactly as described in the earlier report.
 
-Overall, the TA’s feedback provided clear and actionable directions. Our remaining work will focus on strengthening the experimental rigor, improving interpretability, and extending the analysis to the full A~$\rightarrow$~B~$\rightarrow$~C pipeline. These steps will help ensure that our final model is both robust and explainable, providing a more comprehensive understanding of human compatibility prediction.
+\paragraph{Integration of interaction (delta) features.}
+The earlier report anticipated adding interaction features capturing pairwise
+differences (e.g., age gap, rating gaps, shared traits). In the final work we not
+only implemented these but expanded them substantially, incorporating all
+non-leaky \texttt{d\_*} features present in the dataset. This expansion proved to
+be the key driver of improved predictive performance, validating our initial
+hypothesis that compatibility is fundamentally relational.
 
+\subsection{Where We Deviated From or Expanded Upon the Original Plan}
+
+\paragraph{Model variety and planned alternatives.}
+The progress report discussed experimenting with logistic regression, decision
+trees, LightGBM, and CatBoost. In practice, we discovered that implementing and
+optimizing multiple additional models provided diminishing returns relative to
+investing more effort into XGBoost feature engineering and calibration.
+Therefore, we focused on two strong baselines (majority-class and HGB) and two
+XGBoost-based systems (base and interaction-enhanced), deviating from the
+original expectation of a broader model comparison.
 
 
 % \begin{figure}[t]

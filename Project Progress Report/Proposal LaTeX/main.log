@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  11 NOV 2025 21:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  4 DEC 2025 11:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/alvin/Programming/School/4AL3/4AL3-Project/Project Progress Report/Proposal LaTeX/main.tex"
-(/Users/alvin/Programming/School/4AL3/4AL3-Project/Project Progress Report/Proposal LaTeX/main.tex
+**"/Users/gregoryarcher/4AL3-Project-2/Project Progress Report/Proposal LaTeX/main.tex"
+(/Users/gregoryarcher/4AL3-Project-2/Project Progress Report/Proposal LaTeX/main.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
@@ -414,14 +414,6 @@ LaTeX Info: Symbol \textrightarrow not provided by
             Default family used instead on input line 97.
 
 
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 105.
-(/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-Underfull \hbox (badness 3568) in paragraph at lines 105--106
-[]\T1/ptm/b/n/10.95 (+20) String De-cod-ing: \T1/ptm/m/n/10.95 (+20) Many text columns
- []
-
 
 
 [1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}
@@ -429,65 +421,190 @@ Underfull \hbox (badness 3568) in paragraph at lines 105--106
 
 
 {/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-Underfull \hbox (badness 1430) in paragraph at lines 115--116
-[]\T1/ptm/m/n/10.95 (+20) For par-tic-i-pant A, fea-tures in-cluded de-mo-
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 110.
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+Underfull \hbox (badness 3568) in paragraph at lines 110--111
+[]\T1/ptm/b/n/10.95 (+20) String De-cod-ing: \T1/ptm/m/n/10.95 (+20) Many text columns
+ []
+
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 10.95pt on input line 122.
+
+Underfull \hbox (badness 1817) in paragraph at lines 122--123
+\T1/ptm/m/n/10.95 (+20) For par-tic-i-pant A, we in-cluded de-mo-graphic
+ []
+
+
+Underfull \hbox (badness 1389) in paragraph at lines 122--123
+\T1/ptm/m/n/10.95 (+20) at-tributes (age, gen-der, race, field of study),
+ []
+
+
+Underfull \hbox (badness 3138) in paragraph at lines 122--123
+\T1/ptm/m/n/10.95 (+20) (e.g., sports, mu-sic, movies, read-ing, ex-er-
+ []
+
+
+Underfull \hbox (badness 1389) in paragraph at lines 122--123
+\T1/ptm/m/n/10.95 (+20) cise, hik-ing, art, shop-ping), and stated part-
+ []
+
+
+Underfull \hbox (badness 5563) in paragraph at lines 122--123
+\T1/ptm/m/n/10.95 (+20) and \T1/zi4/m/n/10.95 sincere_important\T1/ptm/m/n/10.95 (+20) ). For par-tic-i-pant
+ []
+
+
+Underfull \hbox (badness 1348) in paragraph at lines 122--123
+\T1/ptm/m/n/10.95 (+20) side fea-tures: de-mo-graphic at-tributes (age_o,
  []
 
 
 
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 124.
+
+Underfull \hbox (badness 5862) in paragraph at lines 140--141
+[]\T1/ptm/b/n/10.95 (+20) Augmented Fea-tures with In-ter-ac-tion
+ []
+
 
 
 [2]
-Underfull \hbox (badness 2096) in paragraph at lines 138--139
-\T1/ptm/m/n/10.95 (+20) dataset clean-ing and en-sur-ing in-ter-pretabil-ity.
+Underfull \hbox (badness 10000) in paragraph at lines 163--164
+[]\T1/ptm/b/n/10.95 (+20) HistGradientBoostingClassifier (HGB)\T1/ptm/m/n/10.95 (+20) ,
  []
 
 
+Underfull \hbox (badness 1308) in paragraph at lines 163--164
+\T1/ptm/m/n/10.95 (+20) a fast, histogram-based gradient-boosting
+ []
+
+
+
+
+Underfull \hbox (badness 4120) in paragraph at lines 169--170
+[]\T1/ptm/m/n/10.95 (+20) Categorical vari-ables were en-coded us-ing
+ []
 
 
 
 [3]
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+\T1/ptm/m/n/10.95 (+20) us-ing a \T1/zi4/m/n/10.95 HistGradientBoostingClassifier
+ []
 
-(./main.bbl)
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+\T1/ptm/m/n/10.95 (+20) (HGB) on the hand-selected fea-ture set
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+\T1/ptm/m/n/10.95 (+20) self-ratings, in-ter-ests, and part-ner pref-er-
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 201--202
+\T1/ptm/m/n/10.95 (+20) ences, plus a small set of in-ter-ac-tion terms
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+\T1/ptm/m/n/10.95 (+20) (\T1/zi4/m/n/10.95 samerace\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10.95 d_age\T1/ptm/m/n/10.95 (+20) , \T1/zi4/m/n/10.95 interests_correlate\T1/ptm/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+\T1/zi4/m/n/10.95 importance_same_race\T1/ptm/m/n/10.95 (+20) ,
+ []
+
+
+Underfull \hbox (badness 7133) in paragraph at lines 201--202
+\T1/zi4/m/n/10.95 importance_same_religion\T1/ptm/m/n/10.95 (+20) ). This model
+ []
+
+
+
+
+Underfull \hbox (badness 5519) in paragraph at lines 227--228
+[]\T1/ptm/m/n/10.95 (+20) The interaction-enhanced XG-Boost model
+ []
+
+
 
 [4]
-<plots/true_false_positives.png, id=75, 823.878pt x 354.123pt>
+
+
+
+[5]
+
+
+
+[6]
+Underfull \hbox (badness 4765) in paragraph at lines 345--350
+ []\T1/ptm/b/n/10.95 (+20) Focus on A$\OMS/cmsy/m/n/10.95 !$\T1/ptm/b/n/10.95 (+20) B de-ci-sion pre-dic-tion.[] \T1/ptm/m/n/10.95 (+20) The
+ []
+
+
+
+
+
+[7] (./main.bbl)
+
+
+
+[8
+
+]
+<plots/true_false_positives.png, id=224, 823.878pt x 354.123pt>
 File: plots/true_false_positives.png Graphic file (type png)
 <use plots/true_false_positives.png>
-Package pdftex.def Info: plots/true_false_positives.png  used on input line 229.
+Package pdftex.def Info: plots/true_false_positives.png  used on input line 436.
 (pdftex.def)             Requested size: 455.24411pt x 195.67062pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 238.
+(Font)              <9> on input line 445.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 238.
+(Font)              <5> on input line 445.
+<plots/updated_graphs.png, id=226, 714.7503pt x 281.853pt>
+File: plots/updated_graphs.png Graphic file (type png)
+<use plots/updated_graphs.png>
+Package pdftex.def Info: plots/updated_graphs.png  used on input line 495.
+(pdftex.def)             Requested size: 455.24411pt x 179.52515pt.
 
 
-[5
+[9
 
 
- <./plots/true_false_positives.png>] (./main.aux)
+ <./plots/true_false_positives.png>]
+<plots/comparison_bar_chart.png, id=235, 497.9403pt x 281.853pt>
+File: plots/comparison_bar_chart.png Graphic file (type png)
+<use plots/comparison_bar_chart.png>
+Package pdftex.def Info: plots/comparison_bar_chart.png  used on input line 502.
+(pdftex.def)             Requested size: 455.24411pt x 257.68224pt.
+
+
+[10 <./plots/updated_graphs.png> <./plots/comparison_bar_chart.png>] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C5E321CAC87923730BC32F4AA0428735;974.
+(rerunfilecheck)             Checksum: B3C3C72BA7AE70392AB7BC11138E142E;4833.
  ) 
 Here is how much of TeX's memory you used:
- 14157 strings out of 473190
- 227713 string characters out of 5715801
- 675201 words of memory out of 5000000
- 36999 multiletter control sequences out of 15000+600000
- 599656 words of font info for 202 fonts, out of 8000000 for 9000
+ 14322 strings out of 473190
+ 229994 string characters out of 5715801
+ 677012 words of memory out of 5000000
+ 37054 multiletter control sequences out of 15000+600000
+ 605631 words of font info for 245 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,10n,93p,1265b,536s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (5 pages, 155426 bytes).
+ 90i,10n,93p,1078b,531s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (10 pages, 261542 bytes).
 PDF statistics:
- 132 PDF objects out of 1000 (max. 8388607)
- 105 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 44102 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 302 PDF objects out of 1000 (max. 8388607)
+ 263 compressed objects within 3 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 48376 words of extra memory for PDF output out of 51595 (max. 10000000)
 

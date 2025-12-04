@@ -9,44 +9,46 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: custom.bib
-You've used 2 entries,
+Warning--can't use both volume and number fields in jarvelin2002ir
+You've used 7 entries,
             3764 wiz_defined-function locations,
-            752 strings with 6120 characters,
-and the built_in function-call counts, 1383 in all, are:
-= -- 124
-> -- 52
-< -- 1
-+ -- 22
-- -- 16
-* -- 86
-:= -- 234
-add.period$ -- 9
-call.type$ -- 2
-change.case$ -- 17
-chr.to.int$ -- 3
-cite$ -- 2
-duplicate$ -- 80
-empty$ -- 103
-format.name$ -- 19
-if$ -- 295
+            793 strings with 7092 characters,
+and the built_in function-call counts, 5155 in all, are:
+= -- 464
+> -- 201
+< -- 7
++ -- 80
+- -- 58
+* -- 347
+:= -- 766
+add.period$ -- 29
+call.type$ -- 7
+change.case$ -- 60
+chr.to.int$ -- 8
+cite$ -- 8
+duplicate$ -- 321
+empty$ -- 387
+format.name$ -- 82
+if$ -- 1121
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 17
-newline$ -- 15
-num.names$ -- 8
-pop$ -- 37
+missing$ -- 71
+newline$ -- 40
+num.names$ -- 28
+pop$ -- 163
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 47
 quote$ -- 0
-skip$ -- 71
+skip$ -- 264
 stack$ -- 0
-substring$ -- 54
-swap$ -- 43
-text.length$ -- 1
+substring$ -- 204
+swap$ -- 189
+text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 18
-warning$ -- 0
-while$ -- 8
+type$ -- 63
+warning$ -- 1
+while$ -- 32
 width$ -- 0
-write$ -- 30
+write$ -- 96
+(There was 1 warning)

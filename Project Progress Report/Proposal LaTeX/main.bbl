@@ -1,4 +1,4 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{7}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Eastwick et~al.(2014)Eastwick, Luchies, Finkel, and Hunt}]{Eastwick:2014}
@@ -6,6 +6,31 @@ Paul~W. Eastwick, Laura~B. Luchies, Eli~J. Finkel, and Lucy~L. Hunt. 2014.
 \newblock \href {https://doi.org/10.1037/a0032432} {The predictive validity of ideal partner preferences: a review and meta-analysis}.
 \newblock \emph{Psychological Bulletin}, 140(3):623--665.
 \newblock Epub 2013 Apr 15. PMID: 23586697.
+
+\bibitem[{Fisman et~al.(2006)Fisman, Iyengar, Kamenica, and Simonson}]{Fisman:2006}
+Raymond Fisman, Sheena~S. Iyengar, Emir Kamenica, and Itamar Simonson. 2006.
+\newblock \href {https://doi.org/10.1162/qjec.2006.121.2.673} {Gender differences in mate selection: Evidence from a speed dating experiment}.
+\newblock \emph{The Quarterly Journal of Economics}, 121(2):673--697.
+
+\bibitem[{Gale and Shapley(1962)}]{Gale:1962}
+David Gale and Lloyd~S. Shapley. 1962.
+\newblock \href {https://doi.org/10.1080/00029890.1962.11989827} {College admissions and the stability of marriage}.
+\newblock \emph{The American Mathematical Monthly}, 69(1):9--15.
+
+\bibitem[{J{\"a}rvelin and Kek{\"a}l{\"a}inen(2002)}]{jarvelin2002ir}
+Kalervo J{\"a}rvelin and Jaana Kek{\"a}l{\"a}inen. 2002.
+\newblock \href {https://doi.org/10.1145/582415.582418} {Cumulated gain-based evaluation of ir techniques}.
+\newblock In \emph{ACM Transactions on Information Systems (TOIS)}, volume~20, pages 422--446.
+
+\bibitem[{Li et~al.(2020)Li, Karatzoglou, Chen, and Zeng}]{Li:2020}
+Jingnan Li, Alexandros Karatzoglou, Yifei Chen, and Weike Zeng. 2020.
+\newblock \href {https://doi.org/10.1145/3374219} {Towards robust evaluation of recommender systems}.
+\newblock \emph{ACM Transactions on Information Systems}, 38(2):1--33.
+
+\bibitem[{Lundberg and Lee(2017)}]{Lundberg:2017}
+Scott~M. Lundberg and Su-In Lee. 2017.
+\newblock A unified approach to interpreting model predictions.
+\newblock In \emph{Advances in Neural Information Processing Systems}, volume~30.
 
 \bibitem[{Roth(n.d.)}]{Roth:online}
 Alvin~E. Roth. n.d.
