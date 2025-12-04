@@ -149,43 +149,57 @@ We implemented a series of binary classification models to predict whether a par
 
 \subsection{Baselines}
 
-Our simplest baseline is a majority-class classifier that always predicts ``no.'' Since the dataset is imbalanced (approximately 58\% negative and 42\% positive decisions), this baseline achieves 58\% accuracy but an F1 score of 0. This provides a conservative lower bound and highlights the necessity of learning meaningful structure beyond class priors.
+Our simplest baseline is a majority-class classifier that always predicts ``no.'' Since the dataset is imbalanced (approximately 58\% negative and 42\% positive decisions), this baseline achieves 0.58 accuracy but an F1 score of 0, since it never predicts the positive class. This provides a conservative lower bound and highlights the necessity of learning meaningful structure beyond class priors.
 
-As a stronger baseline, we trained a logistic regression model with one-hot encoded categorical variables. This model achieved modest improvements (accuracy $\approx$ 0.60, ROC-AUC $\approx$ 0.62), demonstrating that linear models capture some predictive structure but are insufficient for modeling the complex, nonlinear preference patterns in the dataset.
+As a stronger baseline, we trained a logistic regression model with one-hot encoded categorical variables. This model achieved modest improvements (accuracy $\approx$ 0.60, ROC-AUC $\approx$ 0.62), demonstrating that linear models capture some predictive structure but are insufficient for modeling the complex, nonlinear preference patterns in the dataset. These baselines also serve as sanity checks: if our more complex models could not outperform them, this would suggest issues with preprocessing, feature construction, or evaluation.
+
+\subsection{Model Choice and Design Rationale}
+
+Our primary approach uses gradient-boosted decision trees rather than deep neural networks or kernel methods. This choice is motivated by several practical considerations:
+
+\begin{itemize}
+    \item The dataset is moderately sized and tabular, with a mix of numeric and categorical features, a setting where boosted trees are known to perform strongly.
+    \item Tree-based models naturally handle non-linear interactions and do not require feature scaling, simplifying preprocessing.
+    \item Feature importance, partial dependence, and SHAP-style explanations are relatively well developed for gradient-boosted trees, which aligns with our goal of interpretability.
+\end{itemize}
+
+Alternative architectures such as multilayer perceptrons or transformer-based models could, in principle, be applied to this task, but they would require more extensive architectural choices, regularization, and careful tuning. Given the project scope and the structured nature of the data, boosted trees were a more appropriate and interpretable choice.
 
 \subsection{Primary Models}
 
-Our primary approach uses gradient-boosted decision trees. We experimented with two variants:
+We experimented with two gradient-boosting variants:
 
 \begin{itemize}
-    \item \textbf{HistGradientBoostingClassifier (HGB)}, a fast, histogram-based gradient-boosting model suitable for tabular data.
+    \item \textbf{HistGradientBoostingClassifier (HGB)}, a fast, histogram-based gradient-boosting model from scikit-learn that is well suited to tabular data.
     \item \textbf{XGBoost}, a state-of-the-art gradient-boosting framework offering strong regularization and flexible tree construction.
 \end{itemize}
 
-Both models were trained with the binary cross-entropy (log loss) objective, optimized via additive boosting. Hyperparameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators} were tuned through randomized search. Early stopping on a held-out validation set prevented overfitting and greatly reduced training time.
+Both models were trained with the binary cross-entropy (log loss) objective, optimized via additive boosting. Hyperparameters such as \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsample}, and \texttt{n\_estimators} were tuned through randomized search over reasonable ranges. In practice, we found that shallow to medium-depth trees with a relatively low learning rate provided the best balance between bias and variance.
 
-Categorical variables were encoded using a \texttt{ColumnTransformer} with one-hot encoding, while numeric features were passed through unchanged. Since probability quality is important for downstream analysis, we applied isotonic regression to calibrate model outputs, ensuring that predicted probabilities accurately reflected empirical decision frequencies.
+Categorical variables were encoded using a \texttt{ColumnTransformer} with one-hot encoding, while numeric features were passed through unchanged. Since probability quality is important for downstream analysis, we applied isotonic regression to calibrate model outputs, ensuring that predicted probabilities better matched empirical decision frequencies. This calibration step was performed on a held-out validation set and then frozen before final evaluation on the test set.
 
 \subsection{Feature Variants and Ablations}
 
-We evaluated two feature variants:
+We evaluated two main feature variants:
 
 \begin{enumerate}
     \item \textbf{Base Feature Set:} demographics, self-ratings, preferences, and interests available from pre-event surveys.
     \item \textbf{Rich Feature Set with Interaction Deltas:} an augmented feature set including all non-leaky interaction columns of the form \texttt{d\_*}, which quantify differences between A and B (e.g., age difference, rating gaps, interest mismatch).
 \end{enumerate}
 
-These ablations allowed us to isolate the contribution of interaction features. The interaction-enhanced model performed substantially better, indicating that relational differences between A and B are highly predictive of attraction decisions. These findings are consistent with prior literature on partner preference alignment.
+These ablations allowed us to isolate the contribution of interaction features. The interaction-enhanced model performed substantially better, indicating that relational differences between A and B are highly predictive of attraction decisions. These findings are consistent with prior literature on partner preference alignment and provide empirical support for modeling compatibility as a function of relative distance rather than absolute traits alone.
 
-\subsection{Optimization Strategy}
+\subsection{Optimization Strategy and Reproducibility}
 
-Participants were partitioned at the individual level to avoid having the same person appear in multiple splits. Data were divided into 70\% training, 15\% validation, and 15\% testing. All optimization followed XGBoost's gradient-boosting procedure, with subsampling-based regularization and early stopping to prevent overfitting. Model selection was based on validation ROC-AUC.
+Participants were partitioned at the individual level to avoid having the same person appear in multiple splits. Data were divided into 70\% training, 15\% validation, and 15\% testing. This participant-level splitting is crucial: if the same person appeared in both training and test sets, the model could implicitly memorize their idiosyncrasies, leading to overoptimistic performance estimates.
 
-\subsection{Results}
+All experiments were run with fixed random seeds for NumPy, scikit-learn, and XGBoost to promote reproducibility. Optimization followed XGBoost's gradient-boosting procedure with subsampling-based regularization and early stopping. We monitored validation loss and ROC-AUC, stopping training when no further improvement was observed for a specified patience window. This procedure ensures that the models are not heavily overfitted to the training data while still being expressive enough to capture meaningful structure.
 
-Using the base feature set, our calibrated XGBoost model achieved accuracy $\approx$ 0.63, F1 $\approx$ 0.51, and ROC-AUC $\approx$ 0.66, outperforming both baselines. Incorporating interaction deltas led to a substantial improvement: the interaction-enhanced XGBoost model achieved accuracy $\approx$ 0.73, F1 $\approx$ 0.70, and ROC-AUC $\approx$ 0.80. These results demonstrate that gradient-boosted tree models effectively capture pre-event compatibility and provide a strong foundation for our planned A~$\rightarrow$~B~$\rightarrow$~C compatibility pipeline.
+\subsection{Connection to the A$\rightarrow$B$\rightarrow$C Pipeline}
 
-While we implemented an initial version of the pipeline earlier in the project using a simpler model, the primary focus of this report is the construction and evaluation of the final predictive models themselves. The improved probability calibration and richer feature representations documented here position the model to support more reliable downstream analyses—including A’s top predicted partners (B), the composite “ideal partner” profile (B$^\ast$), and B$^\ast$’s preferred matches (C)—in future extensions of the project.
+In the A~$\rightarrow$~B step, the model is used to score all potential partners B for a given participant A and rank them by predicted decision probability. From the top-$k$ candidates, one can construct a composite partner profile $B^*$ by averaging or weighting their traits.
+
+In the subsequent B~$\rightarrow$~C step, the same decision model can be applied again, this time treating $B^*$ as the chooser and scoring potential matches C. Comparing A and the resulting composite $C^*$ highlights preference gaps between what A wants and what the people A tends to like actually prefer. The careful handling of feature construction, calibration, and participant-level splitting in our implementation ensures that this pipeline, when applied, rests on a well-validated and interpretable decision model.
 
 
 \section{Results and Evaluation}
@@ -376,11 +390,11 @@ Overall, the error analysis indicates that the current model captures many regul
 
 \section*{Team Contributions}
 
-Om led the development of the predictive models, including data preprocessing, feature engineering, and implementation of the gradient-boosted tree classifiers. He conducted the ablation studies, implemented probability calibration, and integrated the feature variants used in the final experiments. Om also contributed to the design of the A~$\rightarrow$~B~$\rightarrow$~C compatibility pipeline and authored major portions of the technical sections of the report.
+Om worked on cleaning and preprocessing the dataset, assisting with exploratory analysis, and preparing the pairing-based input format. He contributed to implementing and tuning several model variants, including boosted-tree methods, and participated in evaluating model performance and interpreting results. Om also contributed to writing and refining the technical sections of the report.
 
-Gregory was responsible for exploratory data analysis, dataset cleaning, and construction of participant-level profile representations used throughout the project. He identified relevant survey features, assisted in organizing the pairing-based input format, and produced visualizations that informed model selection and evaluation. Gregory also contributed to interpreting model outputs and preparing supporting figures for the final report.
+Gregory contributed to dataset preprocessing, exploratory data visualization, and organizing participant-level profile features. He assisted in developing baseline and boosted-tree models, helped design and run feature ablation experiments, and contributed to analyzing model outputs. Gregory supported the preparation of figures and took part in writing the results and discussion sections.
 
-Alvin contributed to the experimental design and evaluation methodology, helping define baseline models, select appropriate performance metrics, and structure the train/validation/test splitting strategy. He assisted with documentation, report writing, and result interpretation, ensuring that the analysis remained clear, coherent, and aligned with the project goals.
+Alvin assisted in validating dataset structure, ensuring correct participant-level splits, and performing exploratory analysis. He contributed to implementing model baselines and tuning hyperparameters for boosted-tree models, as well as evaluating predictions using multiple metrics. Alvin also helped assemble performance summaries and contributed to writing and editing the evaluation and analysis components of the report.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
